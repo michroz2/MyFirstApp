@@ -39,6 +39,7 @@ public class MainActivity extends Activity implements OnClickListener {
                 Log.d(TAG, "play");
                 // TODO: начать воспроизведение последней записи.
                 // TODO: если записи нету, кнопка должна быть неактивна
+                // todo: import android.media.MediaPlayer в помощь
                 break;
             case R.id.buttonStop:
                 Log.d(TAG, "stop");
@@ -50,6 +51,7 @@ public class MainActivity extends Activity implements OnClickListener {
                 Log.d(TAG, "record");
                 // todo: сделать кнопку play неактивной
                 // todo: начать воспроизведение
+                // todo: android.media.MediaRecorder в помощь
                 break;
         }
 
