@@ -24,11 +24,12 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
         android:text="Button"
+        android:visibility="gone"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <ImageButton
-        android:id="@+id/imageButtonStop"
+    <Button
+        android:id="@+id/buttonStop"
         android:layout_width="100dp"
         android:layout_height="100dp"
         android:layout_marginEnd="8dp"
@@ -39,6 +40,7 @@
         android:contentDescription="Stop"
         android:scaleType="fitStart"
         android:src="@android:drawable/checkbox_off_background"
+        android:text="STOP"
         android:tint="@android:color/black"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -48,30 +50,32 @@
         tools:scaleType="fitStart"
         tools:src="@android:drawable/picture_frame" />
 
-    <ImageButton
-        android:id="@+id/imageButtonPlay"
+    <Button
+        android:id="@+id/buttonPlay"
         android:layout_width="100dp"
         android:layout_height="100dp"
         android:background="@android:color/transparent"
         android:contentDescription="Play"
         android:scaleType="fitStart"
         android:src="@android:drawable/ic_media_play"
+        android:text="PLAY"
         android:tint="@android:color/holo_green_dark"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/imageButtonStop"
+        app:layout_constraintStart_toEndOf="@+id/buttonStop"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.75" />
 
-    <ImageButton
-        android:id="@+id/imageButtonRec"
+    <Button
+        android:id="@+id/buttonRec"
         android:layout_width="100dp"
         android:layout_height="100dp"
         android:background="@android:color/transparent"
         android:contentDescription="Rec"
         android:scaleType="fitStart"
         android:src="@android:drawable/presence_audio_busy"
+        android:text="REC"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/imageButtonStop"
+        app:layout_constraintEnd_toStartOf="@+id/buttonStop"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.75" />
 

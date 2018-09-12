@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ImageButton;
 import android.widget.TextView;
 
 public class MainActivity extends Activity {
@@ -29,7 +28,7 @@ public class MainActivity extends Activity {
             }
         });
 
-        ImageButton btnStop = findViewById(R.id.imageButtonStop);
+        Button btnStop = findViewById(R.id.buttonStop);
         btnStop.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -40,7 +39,7 @@ public class MainActivity extends Activity {
 
 
 
-        ImageButton btnPlay = findViewById(R.id.imageButtonPlay);
+        Button btnPlay = findViewById(R.id.buttonPlay);
         btnPlay.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -48,7 +47,7 @@ public class MainActivity extends Activity {
                 textView.setText("Play clicked");
             }
         });
-        ImageButton btnRec = findViewById(R.id.imageButtonRec);
+        Button btnRec = findViewById(R.id.buttonRec);
         btnRec.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
