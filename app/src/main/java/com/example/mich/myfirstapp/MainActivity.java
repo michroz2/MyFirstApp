@@ -84,3 +84,5 @@ public class MainActivity extends Activity {
         Log.d(TAG, "on pause");
     }
 }
+
+//no commit?
