@@ -72,6 +72,19 @@ public class MainActivity extends Activity implements OnClickListener {
             mPlayer.setDataSource(mFileName);
             mPlayer.prepare();
             mPlayer.start();
+            mPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+                @Override
+                public void onCompletion(MediaPlayer mp) {
+                    stopPlaying(); //освобождает медиаплейер
+                    isPlaying = false;
+                    // активизировать нужные кнопки - как после остановки записи
+                    btnPlay.setEnabled(true);
+                    btnStop.setEnabled(false);
+                    btnRec.setEnabled(true);
+
+                }
+            });
+
         } catch (IOException e) {
             Log.e(TAG, "prepare() failed");
         }
@@ -102,6 +115,8 @@ public class MainActivity extends Activity implements OnClickListener {
 
         btnRec = findViewById(R.id.buttonRec);
         btnRec.setOnClickListener(this);
+
+
     }
 
     @Override
