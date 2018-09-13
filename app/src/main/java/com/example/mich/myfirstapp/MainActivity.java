@@ -79,6 +79,24 @@ public class MainActivity extends Activity implements OnClickListener {
         btnRec.setOnClickListener(this);
     }
 
+    @Override
+    public void onStop() {
+        super.onStop();
+
+        //TODO: это здесь временно
+        stopPlaying();
+
+        if (mRecorder != null) {
+            mRecorder.release();
+            mRecorder = null;
+        }
+
+        if (mPlayer != null) {
+            mPlayer.release();
+            mPlayer = null;
+        }
+    }
+
 
     @Override
     public void onClick(View view) {
