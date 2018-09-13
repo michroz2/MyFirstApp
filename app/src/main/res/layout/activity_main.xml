@@ -7,21 +7,26 @@
 
 
     <Button
-            android:id="@+id/buttonPlay"
-            android:text="@string/play"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"/>
+        android:id="@+id/buttonPlay"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:enabled="false"
+        android:text="@string/play" />
+
     <Button
-            android:id="@+id/buttonStop"
-            android:text="@string/stop"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"/>
+        android:id="@+id/buttonStop"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:enabled="false"
+        android:text="@string/stop" />
+
     <Button
-            android:id="@+id/buttonRec"
-            android:text="@string/record"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"/>
+        android:id="@+id/buttonRec"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:enabled="true"
+        android:text="@string/record" />
 </LinearLayout>

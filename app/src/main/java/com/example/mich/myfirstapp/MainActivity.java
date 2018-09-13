@@ -20,7 +20,8 @@ public class MainActivity extends Activity implements OnClickListener {
     private MediaPlayer mPlayer = null;
     private static String mFileName = null;
     private static final int REQUEST_RECORD_AUDIO_PERMISSION = 200;
-
+    private static boolean isRecording = false;
+    private static boolean isPlaying = false;
     private static final String TAG = "MainActivity";
 
     Button btnStop;
@@ -107,9 +108,6 @@ public class MainActivity extends Activity implements OnClickListener {
     public void onStop() {
         super.onStop();
 
-        //TODO: это здесь временно
-        stopPlaying();
-
         if (mRecorder != null) {
             mRecorder.release();
             mRecorder = null;
@@ -127,24 +125,42 @@ public class MainActivity extends Activity implements OnClickListener {
         switch (view.getId()) {
             case R.id.buttonPlay:
                 Log.d(TAG, "play");
-                // TODO: начать воспроизведение последней записи.
+                // начать воспроизведение последней записи.
                 startPlaying(mFileName);
-                // TODO: если записи нету, кнопка должна быть неактивна
-                // todo: import android.media.MediaPlayer в помощь
+                // установить кнопки:
+                btnPlay.setEnabled(false);
+                btnStop.setEnabled(true);
+                btnRec.setEnabled(false);
+                isPlaying = true;
                 break;
             case R.id.buttonStop:
                 Log.d(TAG, "stop");
-                // todo: остановить запись
-                stopRecording();
-                // todo: если запись не воспроизводится и не записывается, то кнопка неактивна
+                //остановить запись или воспроизведение
+                if( isRecording) {
+                    stopRecording();
+                    isRecording = false;
+                }
+                else {
+                    if (isPlaying) {
+                        stopPlaying();
+                        isPlaying = false;
 
+                    }
+                }
+                // после нажатия кнопка неактивна, но остальные активизируются
+                btnPlay.setEnabled(true);
+                btnStop.setEnabled(false);
+                btnRec.setEnabled(true);
                 break;
             case R.id.buttonRec:
                 Log.d(TAG, "record");
-                // todo: сделать кнопку play неактивной
-                // todo: начать воспроизведение
+                //сделать кнопку play, rec неактивной, а stop активной
+                btnPlay.setEnabled(false); //на всякий случай
+                btnStop.setEnabled(true);
+                btnRec.setEnabled(false);
+                // начать запись
                 startRecording(mFileName);
-                // todo: android.media.MediaRecorder в помощь
+                isRecording = true;
                 break;
         }
 
