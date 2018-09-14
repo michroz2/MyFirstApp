@@ -1,6 +1,9 @@
 <resources>
-    <string name="app_name">MyFirstApp</string>
+    <string name="app_name">MyFirstDic</string>
     <string name="play">PLAY</string>
     <string name="stop">STOP</string>
     <string name="record">RECORD</string>
+    <string name="recording">RECORDING</string>
+    <string name="recordorplay">RECORD OR PLAY</string>
+    <string name="playing">PLAYING</string>
 </resources>
