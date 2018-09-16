@@ -38,7 +38,8 @@
             android:layout_weight="1"
             android:enabled="false"
             android:text="@string/play"
-            android:visibility="gone" />
+            android:visibility="gone"
+            />
 
         <Button
             android:id="@+id/buttonStop"
@@ -47,7 +48,8 @@
             android:layout_weight="1"
             android:enabled="false"
             android:text="@string/stop"
-            android:visibility="gone" />
+            android:visibility="gone"
+            />
 
         <Button
             android:id="@+id/buttonRec"
@@ -56,44 +58,45 @@
             android:layout_weight="1"
             android:enabled="true"
             android:text="@string/record"
-            android:visibility="gone" />
+            android:visibility="gone"
+        />
 
         <ImageButton
             android:id="@+id/imageButtonPlay"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:background="@android:color/transparent"
             android:contentDescription="@string/play"
             android:enabled="false"
-            android:focusableInTouchMode="true"
-            android:onClick="onClick"
             android:src="@drawable/buttonplay"
             tools:clickable="true"
-            tools:focusable="auto" />
+        />
+        <!--android:visibility="gone"-->
 
         <ImageButton
             android:id="@+id/imageButtonStop"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:background="@android:color/transparent"
             android:contentDescription="@string/stop"
             android:enabled="false"
-            android:onClick="onClick"
             android:src="@drawable/buttonstop"
-            tools:clickable="true" />
+            tools:clickable="true"
+        />
 
         <ImageButton
             android:id="@+id/imageButtonRec"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:background="@android:color/transparent"
             android:contentDescription="@string/record"
             android:enabled="true"
             android:src="@drawable/buttonrec"
-            tools:clickable="true" />
+            tools:clickable="true"
+        />
     </LinearLayout>
 
 </android.support.constraint.ConstraintLayout>

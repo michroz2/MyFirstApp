@@ -2,6 +2,7 @@ package com.example.mich.myfirstapp;
 
 import android.Manifest;
 import android.app.Activity;
+import android.nfc.Tag;
 import android.os.Bundle;
 import android.content.pm.PackageManager;
 import android.support.annotation.AnyRes;
@@ -10,6 +11,7 @@ import android.support.v4.app.ActivityCompat;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.ViewDebug;
 import android.widget.Button;
 import android.media.MediaRecorder;
 import android.media.MediaPlayer;
@@ -117,6 +119,19 @@ public class MainActivity extends Activity implements OnClickListener {
 
     }
 
+    private void showRecAmplitude(MediaRecorder mRecorder) {
+        if (isRecording) {
+            Integer intRecAmplitude = mRecorder.getMaxAmplitude();
+            String sRecAmplitude = intRecAmplitude.toString();
+            Log.d(TAG, sRecAmplitude);
+            // установить текст Амплитуды в центре экрана
+            txtViewMessage.setText(sRecAmplitude);
+
+        }
+
+    }
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -166,6 +181,7 @@ public class MainActivity extends Activity implements OnClickListener {
     @Override
     public void onStop() {
         super.onStop();
+        Log.d(TAG, "on stop");
 
         if (mRecorder != null) {
             mRecorder.release();
@@ -181,6 +197,7 @@ public class MainActivity extends Activity implements OnClickListener {
 
     @Override
     public void onClick(View view) {
+        Log.d(TAG, "on click");
         switch (view.getId()) {
             case R.id.buttonPlay:
             case R.id.imageButtonPlay:
@@ -247,6 +264,45 @@ public class MainActivity extends Activity implements OnClickListener {
         }
 
     }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        Log.d(TAG, "on BackPressed");
+    }
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        Log.d(TAG, "on Destroy");
+    }
+    @Override
+    public void onContentChanged() {
+        super.onContentChanged();
+        Log.d(TAG, "on ContentChanged");
+    }
+    @Override
+    public void onPause() {
+        super.onPause();
+        Log.d(TAG, "on Pause");
+    }
+    @Override
+    public void onRestart() {
+        super.onRestart();
+        Log.d(TAG, "on Restart");
+    }
+    @Override
+    public void onResume() {
+        super.onResume();
+        Log.d(TAG, "on Resume");
+    }
+    @Override
+    public void onUserInteraction() {
+        super.onUserInteraction();
+ //       Log.d(TAG, "on UserInteraction");
+        showRecAmplitude(mRecorder);
+    }
+
+
 }
 
 //no commit?
