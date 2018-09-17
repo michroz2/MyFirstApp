@@ -29,7 +29,7 @@ public class MainActivity extends Activity implements OnClickListener {
     */
     private static final String TAG = "MainActivity";
 
-    private String strMessage = getString(R.string.state_initial); //"START RECORDING";
+
     TextView txtViewMessage = null;
     Button btnStop;
     Button btnPlay;
@@ -37,7 +37,7 @@ public class MainActivity extends Activity implements OnClickListener {
     ImageButton ibtnStop;
     ImageButton ibtnPlay;
     ImageButton ibtnRec;
-    ActivityState mActivityState = ActivityState.INITIAL;
+    ActivityState mActivityState;
 
     // Requesting permission to RECORD_AUDIO
     private boolean permissionToRecordAccepted = false;
@@ -91,14 +91,12 @@ public class MainActivity extends Activity implements OnClickListener {
                 @Override
                 public void onCompletion(MediaPlayer mp) {
                     stopPlaying();
-                    //TODO check if we need this here:
-                    updateState(ActivityState.STOPPED);
                 }
             });
 
         } catch (IOException e) {
             Log.e(TAG, "prepare() failed");
-            updateState(ActivityState.INITIAL);
+            stopPlaying();
         }
     }
 
@@ -118,10 +116,10 @@ public class MainActivity extends Activity implements OnClickListener {
             txtViewMessage.setText(sRecAmplitude);
 
         }
-
     }
 
     private void updateState(ActivityState state) {
+        if (state == mActivityState) return;
 
         mActivityState = state;
 
