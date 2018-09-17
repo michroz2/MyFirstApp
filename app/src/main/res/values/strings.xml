@@ -3,7 +3,8 @@
     <string name="play">PLAY</string>
     <string name="stop">STOP</string>
     <string name="record">RECORD</string>
-    <string name="recording">RECORDING</string>
-    <string name="recordorplay">RECORD OR PLAY</string>
-    <string name="playing">PLAYING</string>
+    <string name="state_recording">RECORDING...</string>
+    <string name="state_stopped">RECORD OR PLAY</string>
+    <string name="state_playing">PLAYING...</string>
+    <string name="state_initial">START RECORDING!</string>
 </resources>

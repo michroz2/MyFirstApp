@@ -2,16 +2,13 @@ package com.example.mich.myfirstapp;
 
 import android.Manifest;
 import android.app.Activity;
-import android.nfc.Tag;
 import android.os.Bundle;
 import android.content.pm.PackageManager;
-import android.support.annotation.AnyRes;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.ViewDebug;
 import android.widget.Button;
 import android.media.MediaRecorder;
 import android.media.MediaPlayer;
@@ -26,11 +23,13 @@ public class MainActivity extends Activity implements OnClickListener {
     private MediaPlayer mPlayer = null;
     private static String mFileName = null;
     private static final int REQUEST_RECORD_AUDIO_PERMISSION = 200;
+/*
     private static boolean isRecording = false;
     private static boolean isPlaying = false;
+*/
     private static final String TAG = "MainActivity";
 
-    private static String strMessage = "START RECORDING";
+    private String strMessage = getString(R.string.state_initial); //"START RECORDING";
     TextView txtViewMessage = null;
     Button btnStop;
     Button btnPlay;
@@ -38,6 +37,7 @@ public class MainActivity extends Activity implements OnClickListener {
     ImageButton ibtnStop;
     ImageButton ibtnPlay;
     ImageButton ibtnRec;
+    ActivityState mActivityState = ActivityState.INITIAL;
 
     // Requesting permission to RECORD_AUDIO
     private boolean permissionToRecordAccepted = false;
@@ -70,14 +70,14 @@ public class MainActivity extends Activity implements OnClickListener {
         }
 
         mRecorder.start();
-        isRecording = true;
+        mActivityState = ActivityState.RECORDING;
     }
 
     private void stopRecording() {
         mRecorder.stop();
         mRecorder.release();
         mRecorder = null;
-        isRecording = false;
+        mActivityState = ActivityState.STOPPED;
 
     }
     private void startPlaying(String mFileName) {
@@ -86,24 +86,14 @@ public class MainActivity extends Activity implements OnClickListener {
             mPlayer.setDataSource(mFileName);
             mPlayer.prepare();
             mPlayer.start();
-            isPlaying = true;
+            mActivityState = ActivityState.PLAYING;
             mPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
                 @Override
                 public void onCompletion(MediaPlayer mp) {
-                    stopPlaying(); // и освобождает медиаплейер
-                    // активизировать нужные кнопки
-                    btnPlay.setEnabled(true);
-                    btnStop.setEnabled(false);
-                    btnRec.setEnabled(true);
-
-                    ibtnPlay.setEnabled(true);
-                    ibtnStop.setEnabled(false);
-                    ibtnRec.setEnabled(true);
-
-                    // установить текст в центре
-                    strMessage = "PLAY OR RECORD";
-                    txtViewMessage.setText(strMessage);
-
+                    stopPlaying();
+                    mActivityState = ActivityState.STOPPED;
+//TODO check if we need this here:
+                    updateState(mActivityState);
                 }
             });
 
@@ -115,20 +105,32 @@ public class MainActivity extends Activity implements OnClickListener {
     private void stopPlaying() {
         mPlayer.release();
         mPlayer = null;
-        isPlaying = false;
 
     }
-
+//Тестовая процедура для вывода данных максимальной громкости медиарекордера (по UserInteraction, например) во время рекординга
     private void showRecAmplitude(MediaRecorder mRecorder) {
-        if (isRecording) {
+        if (mActivityState == ActivityState.RECORDING) {
             Integer intRecAmplitude = mRecorder.getMaxAmplitude();
             String sRecAmplitude = intRecAmplitude.toString();
-            Log.d(TAG, sRecAmplitude);
+            Log.d(TAG, "Громкость = " + sRecAmplitude);
             // установить текст Амплитуды в центре экрана
             txtViewMessage.setText(sRecAmplitude);
 
         }
 
+    }
+
+    private void updateState(ActivityState state) {
+
+        txtViewMessage.setText(getString(state.strId));
+
+        btnPlay.setEnabled(state.playBtn);
+        btnStop.setEnabled(state.stopBtn);
+        btnRec.setEnabled(state.recBtn);
+
+        ibtnPlay.setEnabled(state.playBtn);
+        ibtnStop.setEnabled(state.stopBtn);
+        ibtnRec.setEnabled(state.recBtn);
     }
 
 
@@ -138,43 +140,36 @@ public class MainActivity extends Activity implements OnClickListener {
         Log.d(TAG, "on create");
         setContentView(R.layout.activity_main);
 
-        // Record to the external cache directory for visibility
-        mFileName = getExternalCacheDir().getAbsolutePath();
-        mFileName += "/audiorecordtest.3gp";
-
         ActivityCompat.requestPermissions(this, permissions, REQUEST_RECORD_AUDIO_PERMISSION);
 
-        btnStop = findViewById(R.id.buttonStop);
-        btnStop.setOnClickListener(this);
-
-        btnPlay = findViewById(R.id.buttonPlay);
-        btnPlay.setOnClickListener(this);
-
-        btnRec = findViewById(R.id.buttonRec);
-        btnRec.setOnClickListener(this);
+        if (mActivityState == ActivityState.INITIAL) {
+            // Record to the external cache directory for visibility
+            mFileName = getExternalCacheDir().getAbsolutePath();
+            mFileName += "/audiorecordtest.3gp";
 
 
-        ibtnStop = findViewById(R.id.imageButtonStop);
-        ibtnStop.setOnClickListener(this);
+            btnStop = findViewById(R.id.buttonStop);
+            btnStop.setOnClickListener(this);
 
-        ibtnPlay = findViewById(R.id.imageButtonPlay);
-        ibtnPlay.setOnClickListener(this);
+            btnPlay = findViewById(R.id.buttonPlay);
+            btnPlay.setOnClickListener(this);
 
-        ibtnRec = findViewById(R.id.imageButtonRec);
-        ibtnRec.setOnClickListener(this);
+            btnRec = findViewById(R.id.buttonRec);
+            btnRec.setOnClickListener(this);
 
-        //Установить начальное состояние кнопок (потому что в ресурсах не срабатывает SELECTOR для ImageButton)
-        btnPlay.setEnabled(false);
-        btnStop.setEnabled(false);
-        btnRec.setEnabled(true);
 
-        ibtnPlay.setEnabled(false);
-        ibtnStop.setEnabled(false);
-        ibtnRec.setEnabled(true);
+            ibtnStop = findViewById(R.id.imageButtonStop);
+            ibtnStop.setOnClickListener(this);
 
-        //Установить текст
-        txtViewMessage = findViewById(R.id.textView);
-        txtViewMessage.setText(strMessage);
+            ibtnPlay = findViewById(R.id.imageButtonPlay);
+            ibtnPlay.setOnClickListener(this);
+
+            ibtnRec = findViewById(R.id.imageButtonRec);
+            ibtnRec.setOnClickListener(this);
+
+         }
+
+         updateState(mActivityState); //наверное это можно было и в скобках сверху сделать. но, возможно, не помешает лишний раз установить текущий стэйт
 
     }
 
@@ -205,63 +200,37 @@ public class MainActivity extends Activity implements OnClickListener {
                 // начать воспроизведение последней записи.
                 startPlaying(mFileName);
                 // установить кнопки:
-                btnPlay.setEnabled(false);
-                btnStop.setEnabled(true);
-                btnRec.setEnabled(false);
-
-                ibtnPlay.setEnabled(false);
-                ibtnStop.setEnabled(true);
-                ibtnRec.setEnabled(false);
-
-                // установить текст
-                strMessage = "PLAYING...";
-                txtViewMessage.setText(strMessage);
-
-
+                mActivityState = ActivityState.PLAYING;
                 break;
+
             case R.id.buttonStop:
             case R.id.imageButtonStop:
                 Log.d(TAG, "stop");
-                //остановить запись или воспроизведение
-                if( isRecording) {
-                    stopRecording();
-                }
-                else {
-                    if (isPlaying) {
+                //остановить либо запись либо воспроизведение - что там сейчас идёт
+                switch (mActivityState) {
+                    case RECORDING:
+                        stopRecording();
+                        //TODO остановить таймер
+                        break;
+                    case PLAYING:
                         stopPlaying();
-                    }
+                        break;
                 }
-                // активизировать нужные кнопки
-                btnPlay.setEnabled(true);
-                btnStop.setEnabled(false);
-                btnRec.setEnabled(true);
 
-                ibtnPlay.setEnabled(true);
-                ibtnStop.setEnabled(false);
-                ibtnRec.setEnabled(true);
-
-                // установить текст в центре
-                strMessage = "PLAY OR RECORD";
-                txtViewMessage.setText(strMessage);
+                mActivityState = ActivityState.STOPPED;
                 break;
+
             case R.id.buttonRec:
             case R.id.imageButtonRec:
                 Log.d(TAG, "record");
-                //сделать кнопку play, rec неактивной, а stop активной
-                btnPlay.setEnabled(false); //на всякий случай
-                btnStop.setEnabled(true);
-                btnRec.setEnabled(false);
-
-                ibtnPlay.setEnabled(false); //на всякий случай
-                ibtnStop.setEnabled(true);
-                ibtnRec.setEnabled(false);
-                // начать запись
                 startRecording(mFileName);
-                // установить текст в центре
-                strMessage = "RECORDING...";
-                txtViewMessage.setText(strMessage);
+                mActivityState = ActivityState.RECORDING;
+                //TODO - запустить таймер и начать анализировать громкость
                 break;
+
         }
+
+        updateState(mActivityState);
 
     }
 
