@@ -37,7 +37,7 @@ public class MainActivity extends Activity implements OnClickListener {
     ImageButton ibtnStop;
     ImageButton ibtnPlay;
     ImageButton ibtnRec;
-    ActivityState mActivityState;
+    static ActivityState mActivityState = ActivityState.INITIAL;
 
     // Requesting permission to RECORD_AUDIO
     private boolean permissionToRecordAccepted = false;
@@ -119,7 +119,7 @@ public class MainActivity extends Activity implements OnClickListener {
     }
 
     private void updateState(ActivityState state) {
-        if (state == mActivityState) return;
+      //  if (state == mActivityState) return;
 
         mActivityState = state;
 
@@ -143,33 +143,36 @@ public class MainActivity extends Activity implements OnClickListener {
 
         ActivityCompat.requestPermissions(this, permissions, REQUEST_RECORD_AUDIO_PERMISSION);
 
+//        if (mActivityState == ActivityState.INITIAL) {
 
-        // Record to the external cache directory for visibility
-        mFileName = getExternalCacheDir().getAbsolutePath();
-        mFileName += "/audiorecordtest.3gp";
+            // Record to the external cache directory for visibility
+            mFileName = getExternalCacheDir().getAbsolutePath();
+            mFileName += "/audiorecordtest.3gp";
 
+            txtViewMessage = findViewById(R.id.textView);
 
-        btnStop = findViewById(R.id.buttonStop);
-        btnStop.setOnClickListener(this);
+            btnStop = findViewById(R.id.buttonStop);
+            btnStop.setOnClickListener(this);
 
-        btnPlay = findViewById(R.id.buttonPlay);
-        btnPlay.setOnClickListener(this);
+            btnPlay = findViewById(R.id.buttonPlay);
+            btnPlay.setOnClickListener(this);
 
-        btnRec = findViewById(R.id.buttonRec);
-        btnRec.setOnClickListener(this);
-
-
-        ibtnStop = findViewById(R.id.imageButtonStop);
-        ibtnStop.setOnClickListener(this);
-
-        ibtnPlay = findViewById(R.id.imageButtonPlay);
-        ibtnPlay.setOnClickListener(this);
-
-        ibtnRec = findViewById(R.id.imageButtonRec);
-        ibtnRec.setOnClickListener(this);
+            btnRec = findViewById(R.id.buttonRec);
+            btnRec.setOnClickListener(this);
 
 
-        updateState(ActivityState.INITIAL); //наверное это можно было и в скобках сверху сделать. но, возможно, не помешает лишний раз установить текущий стэйт
+            ibtnStop = findViewById(R.id.imageButtonStop);
+            ibtnStop.setOnClickListener(this);
+
+            ibtnPlay = findViewById(R.id.imageButtonPlay);
+            ibtnPlay.setOnClickListener(this);
+
+            ibtnRec = findViewById(R.id.imageButtonRec);
+            ibtnRec.setOnClickListener(this);
+  //      }
+
+
+        updateState(mActivityState); //наверное это можно было и в скобках сверху сделать. но, возможно, не помешает лишний раз установить текущий стэйт
 
     }
 
