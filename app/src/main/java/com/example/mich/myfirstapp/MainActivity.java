@@ -11,6 +11,7 @@ import android.support.v4.app.ActivityCompat;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.ViewDebug;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
@@ -23,10 +24,6 @@ public class MainActivity extends Activity implements OnClickListener {
     private MediaPlayer mPlayer = null;
     private static String mFileName = null;
     private static final int REQUEST_RECORD_AUDIO_PERMISSION = 200;
-    /*
-        private static boolean isRecording = false;
-        private static boolean isPlaying = false;
-    */
     private static final String TAG = "MainActivity";
 
 
@@ -37,9 +34,12 @@ public class MainActivity extends Activity implements OnClickListener {
     ImageButton ibtnStop;
     ImageButton ibtnPlay;
     ImageButton ibtnRec;
-    static ActivityState mActivityState = ActivityState.INITIAL;
+    ActivityState mActivityState = ActivityState.INITIAL;
 
-    // Requesting permission to RECORD_AUDIO
+    GraphArray mGraphArray = new GraphArray();
+    Integer indexGraphArray = 0;
+
+    //for permission to RECORD_AUDIO
     private boolean permissionToRecordAccepted = false;
     private String[] permissions = {Manifest.permission.RECORD_AUDIO};
 
@@ -119,7 +119,8 @@ public class MainActivity extends Activity implements OnClickListener {
     }
 
     private void updateState(ActivityState state) {
-      //  if (state == mActivityState) return;
+        if (state == mActivityState) return;
+        Log.d(TAG, "updateState: " + mActivityState + " -> " + state);
 
         mActivityState = state;
 
@@ -139,6 +140,9 @@ public class MainActivity extends Activity implements OnClickListener {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Log.d(TAG, "on create");
+
+        mGraphArray.initArray(); //TestArray
+
         setContentView(R.layout.activity_main);
 
         ActivityCompat.requestPermissions(this, permissions, REQUEST_RECORD_AUDIO_PERMISSION);
@@ -268,10 +272,13 @@ public class MainActivity extends Activity implements OnClickListener {
     @Override
     public void onUserInteraction() {
         super.onUserInteraction();
-        //       Log.d(TAG, "on UserInteraction");
-        showRecAmplitude(mRecorder);
-    }
+        Log.d(TAG, "on UserInteraction");
+        //Temporary disabled
+        // showRecAmplitude(mRecorder);
+        //Вывод массива по юзерскому, например, клику на поле окна
+        txtViewMessage.setText(mGraphArray.getData(indexGraphArray++).toString());
 
+    }
 
 }
 
