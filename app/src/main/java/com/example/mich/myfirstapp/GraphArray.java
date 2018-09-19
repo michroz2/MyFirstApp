@@ -6,7 +6,7 @@ public class GraphArray {
 
     int[] iData = new int[100];
 
-    GraphArray() {
+    GraphArray() { // todo: в конструктор передать размер и диапазон
 
         int min = -100;
         int max = 100;
