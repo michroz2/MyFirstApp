@@ -36,7 +36,7 @@ public class MainActivity extends Activity implements OnClickListener {
     ImageButton ibtnRec;
     ActivityState mActivityState = null;
 
-    GraphArray mGraphArray = new GraphArray();
+    GraphArray mGraphArray = new GraphArray(100,-100,100);
     Integer indexGraphArray = 0;
 
     //for permission to RECORD_AUDIO

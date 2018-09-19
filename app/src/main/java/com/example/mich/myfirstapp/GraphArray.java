@@ -4,16 +4,12 @@ import java.util.concurrent.ThreadLocalRandom;
 
 public class GraphArray {
 
-    int[] iData = new int[100];
+    int[] iData;
 
-    GraphArray() { // todo: в конструктор передать размер и диапазон
-
-        int min = -100;
-        int max = 100;
-
+    GraphArray(int range, int minRandom, int maxRandom ) {
+        iData = new int[range];
         for (int i = 0; i < iData.length; i++) {
-            iData[i] = ThreadLocalRandom.current().nextInt(min, max + 1);
-//https://stackoverflow.com/questions/363681/how-to-generate-random-integers-within-a-specific-range-in-java
+            iData[i] = ThreadLocalRandom.current().nextInt(minRandom, maxRandom + 1);
         }
     }
 
