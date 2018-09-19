@@ -1,20 +1,23 @@
 package com.example.mich.myfirstapp;
 
+import java.util.concurrent.ThreadLocalRandom;
+
 public class GraphArray {
 
-    // todo: переменная должна быть спрятана от других классов
-    public int[] Data = new int[100]; // TODO: поля в java должны начинаться с маленькой буквы. П
+    int[] iData = new int[100];
 
-    // TODO: 19-Sep-18 инициализацию data перенести в конструктор класса
-    // TODO: 19-Sep-18 массив заполнить случайными значениями от -100 до 100
+    GraphArray() {
 
-    public void initArray() {
-        for (int i = 0; i < Data.length; i++) {
-            Data[i] = i;
+        int min = -100;
+        int max = 100;
+
+        for (int i = 0; i < iData.length; i++) {
+            iData[i] = ThreadLocalRandom.current().nextInt(min, max + 1);
+//https://stackoverflow.com/questions/363681/how-to-generate-random-integers-within-a-specific-range-in-java
         }
     }
 
-    public Integer getData(int i) {       // TODO: у тебя массив int, значит и getData должна возвращать int, a  не Integer
-        return Data[(i % Data.length)];   // TODO: зачем брать остаток от деления на длину массива? достаточно return data[i];
+    public int getData(int i) {
+        return iData[i];
     }
 }

@@ -34,7 +34,7 @@ public class MainActivity extends Activity implements OnClickListener {
     ImageButton ibtnStop;
     ImageButton ibtnPlay;
     ImageButton ibtnRec;
-    ActivityState mActivityState = ActivityState.INITIAL;
+    ActivityState mActivityState = null;
 
     GraphArray mGraphArray = new GraphArray();
     Integer indexGraphArray = 0;
@@ -106,18 +106,6 @@ public class MainActivity extends Activity implements OnClickListener {
         updateState(ActivityState.STOPPED);
     }
 
-    //Тестовая процедура для вывода данных максимальной громкости медиарекордера (по UserInteraction, например) во время рекординга
-    private void showRecAmplitude(MediaRecorder mRecorder) {
-        if (mActivityState == ActivityState.RECORDING) {
-            Integer intRecAmplitude = mRecorder.getMaxAmplitude();
-            String sRecAmplitude = intRecAmplitude.toString();
-            Log.d(TAG, "Громкость = " + sRecAmplitude);
-            // установить текст Амплитуды в центре экрана
-            txtViewMessage.setText(sRecAmplitude);
-
-        }
-    }
-
     private void updateState(ActivityState state) {
         if (state == mActivityState) return;
         Log.d(TAG, "updateState: " + mActivityState + " -> " + state);
@@ -141,13 +129,10 @@ public class MainActivity extends Activity implements OnClickListener {
         super.onCreate(savedInstanceState);
         Log.d(TAG, "on create");
 
-        mGraphArray.initArray(); //TestArray
-
         setContentView(R.layout.activity_main);
 
         ActivityCompat.requestPermissions(this, permissions, REQUEST_RECORD_AUDIO_PERMISSION);
 
-//        if (mActivityState == ActivityState.INITIAL) {
 
             // Record to the external cache directory for visibility
             mFileName = getExternalCacheDir().getAbsolutePath();
@@ -173,10 +158,9 @@ public class MainActivity extends Activity implements OnClickListener {
 
             ibtnRec = findViewById(R.id.imageButtonRec);
             ibtnRec.setOnClickListener(this);
-  //      }
 
 
-        updateState(mActivityState); //наверное это можно было и в скобках сверху сделать. но, возможно, не помешает лишний раз установить текущий стэйт
+        updateState(ActivityState.INITIAL);
 
     }
 
@@ -273,10 +257,8 @@ public class MainActivity extends Activity implements OnClickListener {
     public void onUserInteraction() {
         super.onUserInteraction();
         Log.d(TAG, "on UserInteraction");
-        //Temporary disabled
-        // showRecAmplitude(mRecorder);
         //Вывод массива по юзерскому, например, клику на поле окна
-        txtViewMessage.setText(mGraphArray.getData(indexGraphArray++).toString());
+        txtViewMessage.setText(indexGraphArray.toString() + ": " + String.valueOf(mGraphArray.getData(indexGraphArray++ % 100)));
 
     }
 
