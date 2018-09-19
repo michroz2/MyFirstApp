@@ -1,22 +1,36 @@
 package com.example.mich.myfirstapp;
 
-import java.util.concurrent.ThreadLocalRandom;
+import java.util.Random;
+
 
 public class GraphArray {
 
-    int[] iData;
+    int[] data;
 
     GraphArray(int range, int minRandom, int maxRandom ) {
-        iData = new int[range];
-        for (int i = 0; i < iData.length; i++) {
-            iData[i] = ThreadLocalRandom.current().nextInt(minRandom, maxRandom + 1);
+        data = new int[range];
+        Random rand = new Random();
+
+        for (int i = 0; i < data.length; i++) {
+            data[i] = rand.nextInt((maxRandom-minRandom+1)) + minRandom;
         }
     }
 
     public int getData(int i) {
-        return iData[i];
+        return data[i];
     }
 
 
-    // TODO: 19-Sep-18 написать метод, который переворачивае массив. Первый элемент станет последним, а последним станет первым
-}
+    public void reverse() {
+        int left = 0;
+        int right = data.length - 1;
+
+        while( left < right ) {
+            int temp = data[left];
+            data[left] = data[right];
+            data[right] = temp;
+
+            left++;
+            right--;
+        }
+    }}
