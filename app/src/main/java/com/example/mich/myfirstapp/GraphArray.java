@@ -16,4 +16,7 @@ public class GraphArray {
     public int getData(int i) {
         return iData[i];
     }
+
+
+    // TODO: 19-Sep-18 написать метод, который переворачивае массив. Первый элемент станет последним, а последним станет первым
 }
