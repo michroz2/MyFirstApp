@@ -36,7 +36,7 @@ public class MainActivity extends Activity implements OnClickListener {
     ImageButton ibtnRec;
     ActivityState mActivityState = null;
 
-    GraphArray mGraphArray = new GraphArray(100,-100,100);
+    GraphArray mGraphArray = new GraphArray(100, -100, 100);
     Integer indexGraphArray = 0;
 
     //for permission to RECORD_AUDIO
@@ -134,30 +134,30 @@ public class MainActivity extends Activity implements OnClickListener {
         ActivityCompat.requestPermissions(this, permissions, REQUEST_RECORD_AUDIO_PERMISSION);
 
 
-            // Record to the external cache directory for visibility
-            mFileName = getExternalCacheDir().getAbsolutePath();
-            mFileName += "/audiorecordtest.3gp";
+        // Record to the external cache directory for visibility
+        mFileName = getExternalCacheDir().getAbsolutePath();
+        mFileName += "/audiorecordtest.3gp";
 
-            txtViewMessage = findViewById(R.id.textView);
+        txtViewMessage = findViewById(R.id.textView);
 
-            btnStop = findViewById(R.id.buttonStop);
-            btnStop.setOnClickListener(this);
+        btnStop = findViewById(R.id.buttonStop);
+        btnStop.setOnClickListener(this);
 
-            btnPlay = findViewById(R.id.buttonPlay);
-            btnPlay.setOnClickListener(this);
+        btnPlay = findViewById(R.id.buttonPlay);
+        btnPlay.setOnClickListener(this);
 
-            btnRec = findViewById(R.id.buttonRec);
-            btnRec.setOnClickListener(this);
+        btnRec = findViewById(R.id.buttonRec);
+        btnRec.setOnClickListener(this);
 
 
-            ibtnStop = findViewById(R.id.imageButtonStop);
-            ibtnStop.setOnClickListener(this);
+        ibtnStop = findViewById(R.id.imageButtonStop);
+        ibtnStop.setOnClickListener(this);
 
-            ibtnPlay = findViewById(R.id.imageButtonPlay);
-            ibtnPlay.setOnClickListener(this);
+        ibtnPlay = findViewById(R.id.imageButtonPlay);
+        ibtnPlay.setOnClickListener(this);
 
-            ibtnRec = findViewById(R.id.imageButtonRec);
-            ibtnRec.setOnClickListener(this);
+        ibtnRec = findViewById(R.id.imageButtonRec);
+        ibtnRec.setOnClickListener(this);
 
 
         updateState(ActivityState.INITIAL);
@@ -259,7 +259,9 @@ public class MainActivity extends Activity implements OnClickListener {
         Log.d(TAG, "on UserInteraction");
         //Вывод массива по юзерскому, например, клику на поле окна
         txtViewMessage.setText(indexGraphArray.toString() + ": " + String.valueOf(mGraphArray.getData(indexGraphArray++ % 100)));
-
+        //test сортировки michsort
+        GraphArray someArray = new GraphArray(8, 0, 100);
+        GraphArray.michsort(someArray.data, false);
     }
 
 }
