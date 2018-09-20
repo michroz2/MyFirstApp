@@ -6,12 +6,12 @@ import android.content.pm.PackageManager;
 import android.media.MediaPlayer;
 import android.media.MediaRecorder;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.ViewDebug;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
@@ -36,7 +36,7 @@ public class MainActivity extends Activity implements OnClickListener {
     ImageButton ibtnRec;
     ActivityState mActivityState = null;
 
-    GraphArray mGraphArray = new GraphArray(100, -100, 100);
+    TestArray mTestArray = new TestArray(100, -100, 100);
     Integer indexGraphArray = 0;
 
     //for permission to RECORD_AUDIO
@@ -55,6 +55,36 @@ public class MainActivity extends Activity implements OnClickListener {
 
     }
 
+    Handler timerHandler = new Handler();
+
+    Runnable timerRunnable = new Runnable() {
+        @Override
+        public void run() {
+            showRecAmplitude(mRecorder);
+            timerHandler.postDelayed(this, 500);
+        }
+    };
+
+    private void showRecAmplitude(MediaRecorder mRecorder) {
+        if (mActivityState == ActivityState.RECORDING) {
+            Integer intRecAmplitude = mRecorder.getMaxAmplitude();
+            String sRecAmplitude = intRecAmplitude.toString();
+            Log.d(TAG, "Громкость = " + sRecAmplitude);
+            // показать текст Амплитуды
+            txtViewMessage.setText("Vol: " + sRecAmplitude);
+
+        }
+    }
+
+    private void startShowVolume() {
+        timerHandler.postDelayed(timerRunnable, 0);
+
+    }
+
+    private void stopShowVolume() {
+        timerHandler.removeCallbacks(timerRunnable);
+
+    }
 
     private void startRecording(String mFileName) {
         mRecorder = new MediaRecorder();
@@ -106,6 +136,7 @@ public class MainActivity extends Activity implements OnClickListener {
         updateState(ActivityState.STOPPED);
     }
 
+
     private void updateState(ActivityState state) {
         if (state == mActivityState) return;
         Log.d(TAG, "updateState: " + mActivityState + " -> " + state);
@@ -137,6 +168,7 @@ public class MainActivity extends Activity implements OnClickListener {
         // Record to the external cache directory for visibility
         mFileName = getExternalCacheDir().getAbsolutePath();
         mFileName += "/audiorecordtest.3gp";
+
 
         txtViewMessage = findViewById(R.id.textView);
 
@@ -198,8 +230,8 @@ public class MainActivity extends Activity implements OnClickListener {
                 //остановить либо запись либо воспроизведение - что там сейчас идёт
                 switch (mActivityState) {
                     case RECORDING:
+                        stopShowVolume();
                         stopRecording();
-                        //TODO остановить таймер
                         break;
                     case PLAYING:
                         stopPlaying();
@@ -211,7 +243,7 @@ public class MainActivity extends Activity implements OnClickListener {
             case R.id.imageButtonRec:
                 Log.d(TAG, "record");
                 startRecording(mFileName);
-                //TODO - запустить таймер и начать анализировать громкость
+                startShowVolume();
                 break;
 
         }
@@ -239,6 +271,9 @@ public class MainActivity extends Activity implements OnClickListener {
     public void onPause() {
         super.onPause();
         Log.d(TAG, "on Pause");
+        //recomended just in case
+        timerHandler.removeCallbacks(timerRunnable);
+
     }
 
     @Override
@@ -257,11 +292,16 @@ public class MainActivity extends Activity implements OnClickListener {
     public void onUserInteraction() {
         super.onUserInteraction();
         Log.d(TAG, "on UserInteraction");
+
+        //
+        showRecAmplitude(mRecorder);
+
         //Вывод массива по юзерскому, например, клику на поле окна
-        txtViewMessage.setText(indexGraphArray.toString() + ": " + String.valueOf(mGraphArray.getData(indexGraphArray++ % 100)));
+        //txtViewMessage.setText(indexGraphArray.toString() + ": " + String.valueOf(mTestArray.getData(indexGraphArray++ % 100)));
+
         //test сортировки michsort
-        GraphArray someArray = new GraphArray(8, 0, 100);
-        GraphArray.michsort(someArray.data, false);
+        TestArray someArray = new TestArray(8, 0, 100);
+        TestArray.michsort(someArray.data, false);
     }
 
 }

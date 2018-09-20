@@ -2,14 +2,12 @@ package com.example.mich.myfirstapp;
 
 import java.util.Random;
 
-import static com.example.mich.myfirstapp.GraphArray.swap;
 
-
-public class GraphArray {
+public class TestArray {
 
     public int[] data;
 
-    GraphArray(int range, int minRandom, int maxRandom) {
+    TestArray(int range, int minRandom, int maxRandom) {
         data = new int[range];
         Random rand = new Random();
 
@@ -83,7 +81,7 @@ public class GraphArray {
             right--;
         }
         if (!asc) { // значит наоборот :)
-            reverse(data);
+            reverse(data); // понятно, что пострадает производительность  - лишние операции.
         }
 
     }
