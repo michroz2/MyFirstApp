@@ -20,104 +20,85 @@ import java.io.IOException;
 
 public class MainActivity extends Activity implements OnClickListener {
 
-    private MediaRecorder mRecorder = null;
-    private MediaPlayer mPlayer = null;
-    private static String mFileName = null;
-    private static final int REQUEST_RECORD_AUDIO_PERMISSION = 200;
     private static final String TAG = "MainActivity";
 
+    private static final int REQUEST_RECORD_AUDIO_PERMISSION = 200;
+
+    private static String fileName;
 
     TextView txtViewMessage;
-    Button btnStop;
-    Button btnPlay;
-    Button btnRec;
-    ImageButton ibtnStop;
-    ImageButton ibtnPlay;
-    ImageButton ibtnRec;
-    ActivityState mActivityState;
 
+    Button buttonStop;
 
-    // for permission to RECORD_AUDIO
-    private boolean permissionToRecordAccepted = false;
-    private String[] permissions = {Manifest.permission.RECORD_AUDIO};
+    Button buttonPlay;
 
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        switch (requestCode) {
-            case REQUEST_RECORD_AUDIO_PERMISSION:
-                permissionToRecordAccepted = grantResults[0] == PackageManager.PERMISSION_GRANTED;
-                break;
-        }
-        if (!permissionToRecordAccepted) {
-            finish();
-        }
+    Button buttonRecord;
 
-    }
+    ImageButton imageButtonStop;
+
+    ImageButton imageButtonPlay;
+
+    ImageButton imageButtonRecord;
+
+    ActivityState activityState;
 
     Handler timerHandler = new Handler();
+
+    private MediaRecorder mediaRecorder;
 
     Runnable timerRunnable = new Runnable() {
         @Override
         public void run() {
-            showRecAmplitude(mRecorder);
+            showRecAmplitude(mediaRecorder);
             timerHandler.postDelayed(this, 500);
         }
     };
+    private MediaPlayer mediaPlayer;
+    // for permission to RECORD_AUDIO
+    private boolean permissionToRecordAccepted;
 
-    private void showRecAmplitude(MediaRecorder mRecorder) {
-        if (mActivityState == ActivityState.RECORDING) {
-            Integer intRecAmplitude = mRecorder.getMaxAmplitude();
-            String sRecAmplitude = intRecAmplitude.toString();
-            Log.d(TAG, "Громкость = " + sRecAmplitude);
-            // показать текст Амплитуды
-            txtViewMessage.setText("Vol: " + sRecAmplitude);
-
-        }
-    }
+    private String[] permissions = {Manifest.permission.RECORD_AUDIO};
 
     private void startShowVolume() {
         timerHandler.postDelayed(timerRunnable, 0);
-
     }
 
     private void stopShowVolume() {
         timerHandler.removeCallbacks(timerRunnable);
-
     }
 
     private void startRecording(String mFileName) {
-        mRecorder = new MediaRecorder();
-        mRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
-        mRecorder.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP);
-        mRecorder.setOutputFile(mFileName);
-        mRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB);
+        mediaRecorder = new MediaRecorder();
+        mediaRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
+        mediaRecorder.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP);
+        mediaRecorder.setOutputFile(mFileName);
+        mediaRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB);
 
         try {
-            mRecorder.prepare();
+            mediaRecorder.prepare();
         } catch (IOException e) {
             Log.e(TAG, "prepare() failed");
         }
 
-        mRecorder.start();
+        mediaRecorder.start();
         updateState(ActivityState.RECORDING);
     }
 
     private void stopRecording() {
-        mRecorder.stop();
-        mRecorder.release();
-        mRecorder = null;
+        mediaRecorder.stop();
+        mediaRecorder.release();
+        mediaRecorder = null;
         updateState(ActivityState.STOPPED);
     }
 
     private void startPlaying(String mFileName) {
-        mPlayer = new MediaPlayer();
+        mediaPlayer = new MediaPlayer();
         try {
-            mPlayer.setDataSource(mFileName);
-            mPlayer.prepare();
-            mPlayer.start();
+            mediaPlayer.setDataSource(mFileName);
+            mediaPlayer.prepare();
+            mediaPlayer.start();
             updateState(ActivityState.PLAYING);
-            mPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+            mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
                 @Override
                 public void onCompletion(MediaPlayer mp) {
                     stopPlaying();
@@ -131,29 +112,10 @@ public class MainActivity extends Activity implements OnClickListener {
     }
 
     private void stopPlaying() {
-        mPlayer.release();
-        mPlayer = null;
+        mediaPlayer.release();
+        mediaPlayer = null;
         updateState(ActivityState.STOPPED);
     }
-
-
-    private void updateState(ActivityState state) {
-        if (state == mActivityState) return;
-        Log.d(TAG, "updateState: " + mActivityState + " -> " + state);
-
-        mActivityState = state;
-
-        txtViewMessage.setText(getString(state.strId));
-
-        btnPlay.setEnabled(state.playBtn);
-        btnStop.setEnabled(state.stopBtn);
-        btnRec.setEnabled(state.recBtn);
-
-        ibtnPlay.setEnabled(state.playBtn);
-        ibtnStop.setEnabled(state.stopBtn);
-        ibtnRec.setEnabled(state.recBtn);
-    }
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -164,107 +126,52 @@ public class MainActivity extends Activity implements OnClickListener {
 
         ActivityCompat.requestPermissions(this, permissions, REQUEST_RECORD_AUDIO_PERMISSION);
 
-
         // Record to the external cache directory for visibility
-        mFileName = getExternalCacheDir().getAbsolutePath();
-        mFileName += "/audiorecordtest.3gp";
-
+        fileName = getExternalCacheDir().getAbsolutePath() + "/audiorecordtest.3gp";
 
         txtViewMessage = findViewById(R.id.textView);
 
-        btnStop = findViewById(R.id.buttonStop);
-        btnStop.setOnClickListener(this);
+        buttonStop = findViewById(R.id.buttonStop);
+        buttonStop.setOnClickListener(this);
 
-        btnPlay = findViewById(R.id.buttonPlay);
-        btnPlay.setOnClickListener(this);
+        buttonPlay = findViewById(R.id.buttonPlay);
+        buttonPlay.setOnClickListener(this);
 
-        btnRec = findViewById(R.id.buttonRec);
-        btnRec.setOnClickListener(this);
+        buttonRecord = findViewById(R.id.buttonRec);
+        buttonRecord.setOnClickListener(this);
 
 
-        ibtnStop = findViewById(R.id.imageButtonStop);
-        ibtnStop.setOnClickListener(this);
+        imageButtonStop = findViewById(R.id.imageButtonStop);
+        imageButtonStop.setOnClickListener(this);
 
-        ibtnPlay = findViewById(R.id.imageButtonPlay);
-        ibtnPlay.setOnClickListener(this);
+        imageButtonPlay = findViewById(R.id.imageButtonPlay);
+        imageButtonPlay.setOnClickListener(this);
 
-        ibtnRec = findViewById(R.id.imageButtonRec);
-        ibtnRec.setOnClickListener(this);
-
+        imageButtonRecord = findViewById(R.id.imageButtonRec);
+        imageButtonRecord.setOnClickListener(this);
 
         updateState(ActivityState.INITIAL);
 
     }
 
-    @Override
-    public void onStop() {
-        super.onStop();
-        Log.d(TAG, "on stop");
-
-        if (mRecorder != null) {
-            mRecorder.release();
-            mRecorder = null;
+    private void updateState(ActivityState newState) {
+        Log.d(TAG, "updateState: " + activityState + " -> " + newState);
+        if (newState == activityState) {
+            Log.d(TAG, "nothing to do. the new newState is the same");
+            return;
         }
 
-        if (mPlayer != null) {
-            mPlayer.release();
-            mPlayer = null;
-        }
-    }
+        activityState = newState;
 
+        txtViewMessage.setText(getString(newState.strId));
 
-    @Override
-    public void onClick(View view) {
-        Log.d(TAG, "on click");
-        switch (view.getId()) {
-            case R.id.buttonPlay:
-            case R.id.imageButtonPlay:
-                Log.d(TAG, "play");
-                // начать воспроизведение последней записи.
-                startPlaying(mFileName);
-                break;
+        buttonPlay.setEnabled(newState.playBtn);
+        buttonStop.setEnabled(newState.stopBtn);
+        buttonRecord.setEnabled(newState.recBtn);
 
-            case R.id.buttonStop:
-            case R.id.imageButtonStop:
-                Log.d(TAG, "stop");
-                //остановить либо запись либо воспроизведение - что там сейчас идёт
-                switch (mActivityState) {
-                    case RECORDING:
-                        stopShowVolume();
-                        stopRecording();
-                        break;
-                    case PLAYING:
-                        stopPlaying();
-                        break;
-                }
-                break;
-
-            case R.id.buttonRec:
-            case R.id.imageButtonRec:
-                Log.d(TAG, "record");
-                startRecording(mFileName);
-                startShowVolume();
-                break;
-
-        }
-    }
-
-    @Override
-    public void onBackPressed() {
-        super.onBackPressed();
-        Log.d(TAG, "on BackPressed");
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        Log.d(TAG, "on Destroy");
-    }
-
-    @Override
-    public void onContentChanged() {
-        super.onContentChanged();
-        Log.d(TAG, "on ContentChanged");
+        imageButtonPlay.setEnabled(newState.playBtn);
+        imageButtonStop.setEnabled(newState.stopBtn);
+        imageButtonRecord.setEnabled(newState.recBtn);
     }
 
     @Override
@@ -277,15 +184,19 @@ public class MainActivity extends Activity implements OnClickListener {
     }
 
     @Override
-    public void onRestart() {
-        super.onRestart();
-        Log.d(TAG, "on Restart");
-    }
+    public void onStop() {
+        super.onStop();
+        Log.d(TAG, "on stop");
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        Log.d(TAG, "on Resume");
+        if (mediaRecorder != null) {
+            mediaRecorder.release();
+            mediaRecorder = null;
+        }
+
+        if (mediaPlayer != null) {
+            mediaPlayer.release();
+            mediaPlayer = null;
+        }
     }
 
     @Override
@@ -294,7 +205,7 @@ public class MainActivity extends Activity implements OnClickListener {
         Log.d(TAG, "on UserInteraction");
 
         //
-        showRecAmplitude(mRecorder);
+        showRecAmplitude(mediaRecorder);
 
         //Вывод массива по юзерскому, например, клику на поле окна
         //txtViewMessage.setText(indexGraphArray.toString() + ": " + String.valueOf(mTestArray.getData(indexGraphArray++ % 100)));
@@ -308,6 +219,15 @@ public class MainActivity extends Activity implements OnClickListener {
         TestArray.michSort(arr, false);
         printIntArray(arr, "массив после сортировки");
 
+    }
+
+    private void showRecAmplitude(MediaRecorder recorder) {
+        if (activityState == ActivityState.RECORDING) {
+            int amplitude = recorder.getMaxAmplitude();
+            Log.d(TAG, "Громкость = " + amplitude);
+            // показать текст Амплитуды
+            txtViewMessage.setText("Vol: " + amplitude);
+        }
     }
 
     private void printIntArray(int[] arr, String comment) {
@@ -324,6 +244,51 @@ public class MainActivity extends Activity implements OnClickListener {
         }
     }
 
-}
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        switch (requestCode) {
+            case REQUEST_RECORD_AUDIO_PERMISSION:
+                permissionToRecordAccepted = grantResults[0] == PackageManager.PERMISSION_GRANTED;
+                break;
+        }
+        if (!permissionToRecordAccepted) {
+            finish();
+        }
+    }
 
-//no commit?
+    @Override
+    public void onClick(View view) {
+        Log.d(TAG, "on click");
+        switch (view.getId()) {
+            case R.id.buttonPlay:
+            case R.id.imageButtonPlay:
+                Log.d(TAG, "play");
+                // начать воспроизведение последней записи.
+                startPlaying(fileName);
+                break;
+
+            case R.id.buttonStop:
+            case R.id.imageButtonStop:
+                Log.d(TAG, "stop");
+                //остановить либо запись либо воспроизведение - что там сейчас идёт
+                switch (activityState) {
+                    case RECORDING:
+                        stopShowVolume();
+                        stopRecording();
+                        break;
+                    case PLAYING:
+                        stopPlaying();
+                        break;
+                }
+                break;
+
+            case R.id.buttonRec:
+            case R.id.imageButtonRec:
+                Log.d(TAG, "record");
+                startRecording(fileName);
+                startShowVolume();
+                break;
+        }
+    }
+}
