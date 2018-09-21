@@ -3,6 +3,8 @@ package com.example.mich.myfirstapp;
 import org.junit.Assert;
 import org.junit.Test;
 
+import java.security.InvalidParameterException;
+
 
 public class TestArrayTest {
 
@@ -21,9 +23,9 @@ public class TestArrayTest {
         Assert.assertArrayEquals(arr, new int[]{});
     }
 
-    @Test
+    @Test(expected = InvalidParameterException.class)
     public void checkNullArray() {
-        TestArray.michSort(null, true); // fixme: please
+         TestArray.michSort(null, true); // fixme: please
     }
 
     @Test

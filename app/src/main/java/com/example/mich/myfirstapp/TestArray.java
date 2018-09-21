@@ -1,5 +1,6 @@
 package com.example.mich.myfirstapp;
 
+import java.security.InvalidParameterException;
 import java.util.Random;
 
 
@@ -18,6 +19,7 @@ public class TestArray {
 
     /**
      * возвращает элемент массива
+     *
      * @param i индекс элемента, который нужно получить
      * @return значение i-ого элемента
      */
@@ -28,6 +30,7 @@ public class TestArray {
 
     /**
      * Переворачивает любой одноместный массив с ног на голову
+     *
      * @param data массив для переворачивания
      */
     private static void reverse(int[] data) {
@@ -46,9 +49,10 @@ public class TestArray {
 
     /**
      * Меняет местами два элемента массива
+     *
      * @param data массив у которого нужно поменять местами элементы
-     * @param i индекс элемента массива, который нужно поставить на позицию <code>j</code>
-     * @param j индекс элемента массива, который нужно поставить на позицию <code>i</code>
+     * @param i    индекс элемента массива, который нужно поставить на позицию <code>j</code>
+     * @param j    индекс элемента массива, который нужно поставить на позицию <code>i</code>
      */
     private static void swap(int[] data, int i, int j) {
         int temp;
@@ -60,10 +64,14 @@ public class TestArray {
     /**
      * Тестовый метод для изучения циклов и тренировки навыков программирования.
      * Находим минимальное и максимальное значения массива и разносим их по краям, а потом идём к центру
+     *
      * @param data массив, который нужно отсортировать
-     * @param asc порядок сортировки. <code>true</code> - по возрастанию, <code>false</code> - по убыванию
+     * @param asc  порядок сортировки. <code>true</code> - по возрастанию, <code>false</code> - по убыванию
      */
     public static void michSort(int[] data, boolean asc) {
+        if (data == null) {
+            throw new InvalidParameterException("data can't be null");
+        }
 
         int left = 0;
         int right = data.length - 1;
@@ -106,6 +114,7 @@ public class TestArray {
 
     /**
      * sort data array
+     *
      * @param asc sort order
      */
     public void sort(boolean asc) {
