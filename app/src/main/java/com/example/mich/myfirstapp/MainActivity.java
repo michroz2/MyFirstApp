@@ -17,6 +17,7 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 
 import java.io.IOException;
+import java.util.Arrays;
 
 public class MainActivity extends Activity implements OnClickListener {
 
@@ -205,14 +206,16 @@ public class MainActivity extends Activity implements OnClickListener {
         Log.d(TAG, "on UserInteraction");
 
         //
-        showRecAmplitude(mediaRecorder);
+        showRecAmplitude(mediaRecorder); // если конечно идёт запись, иначе ничего не выйдет
 
         //Вывод массива по юзерскому, например, клику на поле окна
         //txtViewMessage.setText(indexGraphArray.toString() + ": " + String.valueOf(mTestArray.getData(indexGraphArray++ % 100)));
 
         //test сортировки michSort
-        TestArray someArray = new TestArray(8, 0, 100);
-        someArray.sort(false);
+  //      TestArray someArray = new TestArray(8, 0, 100);
+  //      someArray.sort(true);
+  //      someArray.sort(false);
+
 
         int[] arr = new int[]{1, 2, 3, 4, 7, 5};
         printIntArray(arr, "массив перед сортировкой");

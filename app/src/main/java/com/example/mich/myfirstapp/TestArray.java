@@ -55,6 +55,7 @@ public class TestArray {
      * @param j    индекс элемента массива, который нужно поставить на позицию <code>i</code>
      */
     private static void swap(int[] data, int i, int j) {
+        if (i == j) return; //nothing to do
         int temp;
         temp = data[i];
         data[i] = data[j];
@@ -79,17 +80,28 @@ public class TestArray {
         int curmax;
         int curminindex;
         int curmaxindex;
+        int lowerside;
+        int higherside;
+
 
         while (left < right) {
-            curmin = data[left];
-            curmax = data[right];
-            curminindex = left;
-            curmaxindex = right;
-            if (curmin > curmax) {
-                swap(data, curminindex, curmaxindex);
-                curmin = data[left];
-                curmax = data[right];
+            if ((data[left] < data[right])^asc) {  // Переставлять местами если ((L < R) AND desc) или ((R > L) AND asc)
+                swap(data, left, right);
+            } // крайние элементы теперь стоят в нужном порядке возрастания
+
+            if (asc) {
+                lowerside = left;
+                higherside = right;
+            } else  {
+                lowerside = right;
+                higherside = left;
             }
+
+            curminindex = lowerside;
+            curmaxindex = higherside;
+            curmin = data[curminindex];
+            curmax = data[curmaxindex];
+
             for (int i = (left + 1); i < right; i++) {
                 if (data[i] < curmin) {
                     curmin = data[i];
@@ -99,17 +111,13 @@ public class TestArray {
                     curmaxindex = i;
                 }
             }
-            if (curminindex != left) swap(data, left, curminindex);
-            if (curmaxindex != right) swap(data, right, curmaxindex);
+            swap(data, lowerside, curminindex);
+            swap(data, higherside, curmaxindex);
 
             left++;
             right--;
         }
 
-        // todo: порефакторить так, чтобы не нужно было реверсить
-        if (!asc) { // значит наоборот :)
-            reverse(data); // понятно, что пострадает производительность  - лишние операции.
-        }
     }
 
     /**
