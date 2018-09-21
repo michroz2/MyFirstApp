@@ -27,19 +27,17 @@ public class MainActivity extends Activity implements OnClickListener {
     private static final String TAG = "MainActivity";
 
 
-    TextView txtViewMessage = null;
+    TextView txtViewMessage;
     Button btnStop;
     Button btnPlay;
     Button btnRec;
     ImageButton ibtnStop;
     ImageButton ibtnPlay;
     ImageButton ibtnRec;
-    ActivityState mActivityState = null;
+    ActivityState mActivityState;
 
-    TestArray mTestArray = new TestArray(100, -100, 100);
-    Integer indexGraphArray = 0;
 
-    //for permission to RECORD_AUDIO
+    // for permission to RECORD_AUDIO
     private boolean permissionToRecordAccepted = false;
     private String[] permissions = {Manifest.permission.RECORD_AUDIO};
 
@@ -51,7 +49,9 @@ public class MainActivity extends Activity implements OnClickListener {
                 permissionToRecordAccepted = grantResults[0] == PackageManager.PERMISSION_GRANTED;
                 break;
         }
-        if (!permissionToRecordAccepted) finish();
+        if (!permissionToRecordAccepted) {
+            finish();
+        }
 
     }
 
@@ -299,9 +299,29 @@ public class MainActivity extends Activity implements OnClickListener {
         //Вывод массива по юзерскому, например, клику на поле окна
         //txtViewMessage.setText(indexGraphArray.toString() + ": " + String.valueOf(mTestArray.getData(indexGraphArray++ % 100)));
 
-        //test сортировки michsort
+        //test сортировки michSort
         TestArray someArray = new TestArray(8, 0, 100);
-        TestArray.michsort(someArray.data, false);
+        someArray.sort(false);
+
+        int[] arr = new int[]{1, 2, 3, 4, 7, 5};
+        printIntArray(arr, "массив перед сортировкой");
+        TestArray.michSort(arr, false);
+        printIntArray(arr, "массив после сортировки");
+
+    }
+
+    private void printIntArray(int[] arr, String comment) {
+        Log.d(TAG, "\n=============================");
+        Log.d(TAG, comment);
+        Log.d(TAG, "=============================");
+        printIntArray(arr);
+        Log.d(TAG, "\n");
+    }
+
+    private void printIntArray(int[] arr) {
+        for (int a : arr) {
+            Log.d(TAG, String.valueOf(a));
+        }
     }
 
 }

@@ -5,7 +5,7 @@ import java.util.Random;
 
 public class TestArray {
 
-    public int[] data;
+    private int[] data;
 
     TestArray(int range, int minRandom, int maxRandom) {
         data = new int[range];
@@ -16,13 +16,21 @@ public class TestArray {
         }
     }
 
+    /**
+     * возвращает элемент массива
+     * @param i индекс элемента, который нужно получить
+     * @return значение i-ого элемента
+     */
     public int getData(int i) {
         return data[i];
     }
 
 
-    public static void reverse(int[] data) {
-// Переворачивает любой одноместный массив с ног на голову
+    /**
+     * Переворачивает любой одноместный массив с ног на голову
+     * @param data
+     */
+    private static void reverse(int[] data) {
         int left = 0;
         int right = data.length - 1;
 
@@ -36,12 +44,17 @@ public class TestArray {
         }
     }
 
-    static void swap(int[] data, int i, int j) { //меняет местами два элемента массива
-        int temp = 0;
+    /**
+     * Меняет местами два элемента массива
+     * @param data массив у которого нужно поменять местами элементы
+     * @param i индекс элемента массива, который нужно поставить на позицию j
+     * @param j индекс элемента массива, который нужно поставить на позицию i
+     */
+    private static void swap(int[] data, int i, int j) {
+        int temp;
         temp = data[i];
         data[i] = data[j];
         data[j] = temp;
-
     }
 
     /**
@@ -50,14 +63,14 @@ public class TestArray {
      * @param data массив, который нужно отсортировать
      * @param asc порядок сортировки. <code>true</code> - по возрастанию, <code>false</code> - по убыванию
      */
-    public static void michsort(int[] data, boolean asc) {
+    public static void michSort(int[] data, boolean asc) {
 
         int left = 0;
         int right = data.length - 1;
-        int curmin = data[left];
-        int curmax = data[right];
-        int curminindex = left;
-        int curmaxindex = right;
+        int curmin;
+        int curmax;
+        int curminindex;
+        int curmaxindex;
 
         while (left < right) {
             curmin = data[left];
@@ -89,6 +102,13 @@ public class TestArray {
         if (!asc) { // значит наоборот :)
             reverse(data); // понятно, что пострадает производительность  - лишние операции.
         }
+    }
 
+    /**
+     * sort data array
+     * @param asc sort order
+     */
+    public void sort(boolean asc) {
+        michSort(data, asc);
     }
 }
