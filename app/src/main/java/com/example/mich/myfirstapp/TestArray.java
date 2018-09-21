@@ -21,14 +21,14 @@ public class TestArray {
      * @param i индекс элемента, который нужно получить
      * @return значение i-ого элемента
      */
+    @SuppressWarnings("unused")
     public int getData(int i) {
         return data[i];
     }
 
-
     /**
      * Переворачивает любой одноместный массив с ног на голову
-     * @param data
+     * @param data массив для переворачивания
      */
     private static void reverse(int[] data) {
         int left = 0;
@@ -47,8 +47,8 @@ public class TestArray {
     /**
      * Меняет местами два элемента массива
      * @param data массив у которого нужно поменять местами элементы
-     * @param i индекс элемента массива, который нужно поставить на позицию j
-     * @param j индекс элемента массива, который нужно поставить на позицию i
+     * @param i индекс элемента массива, который нужно поставить на позицию <code>j</code>
+     * @param j индекс элемента массива, который нужно поставить на позицию <code>i</code>
      */
     private static void swap(int[] data, int i, int j) {
         int temp;
