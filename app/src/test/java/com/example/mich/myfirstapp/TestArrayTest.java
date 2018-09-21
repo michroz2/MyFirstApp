@@ -25,7 +25,7 @@ public class TestArrayTest {
 
     @Test(expected = InvalidParameterException.class)
     public void checkNullArray() {
-         TestArray.michSort(null, true); // fixme: please
+         TestArray.michSort(null, true);
     }
 
     @Test
