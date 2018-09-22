@@ -9,7 +9,7 @@ import java.security.InvalidParameterException;
 public class TestArrayTest {
 
     @Test
-    public void sortAsс() {
+    public void sortAsc() {
         int[] arr = new int[]{2, 3, 1};
         TestArray.michSort(arr, true);
         Assert.assertArrayEquals(arr, new int[]{1, 2, 3});
@@ -25,7 +25,7 @@ public class TestArrayTest {
 
     @Test(expected = InvalidParameterException.class)
     public void checkNullArray() {
-         TestArray.michSort(null, true);
+        TestArray.michSort(null, true);
     }
 
     @Test
@@ -33,6 +33,5 @@ public class TestArrayTest {
         int[] arr = new int[]{2, 3, 1};
         TestArray.michSort(arr, false);
         Assert.assertArrayEquals(arr, new int[]{3, 2, 1});
-
     }
 }
