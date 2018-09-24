@@ -8,11 +8,11 @@ public abstract class Dwelling {
     private int area;
 
     // Конструктор
-    Dwelling(String s, int y, int a) {
-        address = a;
-        constructionYear = y;
+    Dwelling(String newAddress, int newYear, int newArea) {
+        address = newAddress;
+        constructionYear = newYear;
         tenants = new Tenant[]{};
-        area = a;
+        area = newArea;
     }
 
     public void moveIn(Tenant tenant) {
