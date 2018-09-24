@@ -6,15 +6,15 @@ public abstract class Dwelling {
     private int constructionYear;
     private Tenant[] tenants;
 
-    public void MoveIn(Tenant tenant) {
+    public void moveIn(Tenant tenant) {
 
     }
 
-    public void MoveOut(Tenant tenant) {
+    public void moveOut(Tenant tenant) {
 
     }
 
-    public int NumTenants() {
+    public int getNumTenants() {
         return tenants.length;
     }
 }
