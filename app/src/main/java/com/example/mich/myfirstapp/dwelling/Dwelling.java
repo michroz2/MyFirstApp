@@ -1,7 +1,7 @@
 package com.example.mich.myfirstapp.dwelling;
 
 
-public class Dwelling {
+public abstract class Dwelling {
     private String address;
     private int constructionYear;
     private Tenant[] tenants;
