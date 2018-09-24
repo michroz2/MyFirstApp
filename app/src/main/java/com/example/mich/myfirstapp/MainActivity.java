@@ -144,7 +144,7 @@ public class MainActivity extends Activity implements OnClickListener {
 
         txtView1 = findViewById(R.id.textView);
 
-        imgView1 = findViewById(R.id.imageView)
+        imgView1 = findViewById(R.id.imageView);
 
         buttonStop = findViewById(R.id.buttonStop);
         buttonStop.setOnClickListener(this);
@@ -237,7 +237,7 @@ public class MainActivity extends Activity implements OnClickListener {
         printIntArray(arr, "массив после сортировки");
 
         // Тест для imageView
-        imgView1
+
 
     }
 

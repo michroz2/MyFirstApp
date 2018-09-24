@@ -1,13 +1,10 @@
-package com.example.mich.myfirstapp;
+package com.example.mich.myfirstapp.dwelling;
 
-import android.location.Address;
-
-import java.time.Year;
 
 public class Dwelling {
-    public Address address;
-    public Year constructionYear;
-    public Tenant[] tenants;
+    private String address;
+    private int constructionYear;
+    private Tenant[] tenants;
 
     public void MoveIn(Tenant tenant) {
 
