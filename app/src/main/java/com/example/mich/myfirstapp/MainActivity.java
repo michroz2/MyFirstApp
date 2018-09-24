@@ -14,6 +14,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.io.IOException;
@@ -36,7 +37,9 @@ public class MainActivity extends Activity implements OnClickListener {
 
     private static String fileName;
 
-    TextView txtViewMessage;
+    TextView txtView1;
+
+    ImageView imgView1;
 
     Button buttonStop;
 
@@ -139,7 +142,9 @@ public class MainActivity extends Activity implements OnClickListener {
         // Record to the external cache directory for visibility
         fileName = getExternalCacheDir().getAbsolutePath() + "/audiorecordtest.3gp";
 
-        txtViewMessage = findViewById(R.id.textView);
+        txtView1 = findViewById(R.id.textView);
+
+        imgView1 = findViewById(R.id.imageView)
 
         buttonStop = findViewById(R.id.buttonStop);
         buttonStop.setOnClickListener(this);
@@ -173,7 +178,7 @@ public class MainActivity extends Activity implements OnClickListener {
 
         activityState = newState;
 
-        txtViewMessage.setText(getString(newState.strId));
+        txtView1.setText(getString(newState.strId));
 
         buttonPlay.setEnabled(newState.playBtn);
         buttonStop.setEnabled(newState.stopBtn);
@@ -215,10 +220,10 @@ public class MainActivity extends Activity implements OnClickListener {
         Log.d(TAG, "on UserInteraction");
 
         //
-        showRecAmplitude(mediaRecorder); // если конечно идёт запись, иначе ничего не выйдет
+        showRecAmplitude(mediaRecorder); // если конечно при этом идёт запись, иначе ничего не выйдет
 
         //Вывод массива по юзерскому, например, клику на поле окна
-        //txtViewMessage.setText(indexGraphArray.toString() + ": " + String.valueOf(mTestArray.getData(indexGraphArray++ % 100)));
+        //txtView1.setText(indexGraphArray.toString() + ": " + String.valueOf(mTestArray.getData(indexGraphArray++ % 100)));
 
         //test сортировки michSort
         //      TestArray someArray = new TestArray(8, 0, 100);
@@ -231,6 +236,9 @@ public class MainActivity extends Activity implements OnClickListener {
         TestArray.michSort(arr, false);
         printIntArray(arr, "массив после сортировки");
 
+        // Тест для imageView
+        imgView1
+
     }
 
     private void showRecAmplitude(MediaRecorder recorder) {
@@ -238,7 +246,7 @@ public class MainActivity extends Activity implements OnClickListener {
             int amplitude = recorder.getMaxAmplitude();
             Log.d(TAG, "Громкость = " + amplitude);
             // показать текст Амплитуды
-            txtViewMessage.setText("Vol: " + amplitude);
+            txtView1.setText("Vol: " + amplitude);
         }
     }
 
