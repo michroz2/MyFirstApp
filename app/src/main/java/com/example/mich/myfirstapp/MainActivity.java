@@ -17,9 +17,18 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 
 import java.io.IOException;
-import java.util.Arrays;
 
 public class MainActivity extends Activity implements OnClickListener {
+
+
+    /**
+     * 1) TODO: Написать класс "Желец" у него есть имя
+     * 2) TODO: написать класс "Желище". У него есть адресс, жилая площадь и год постройкти. туда можно заселять "Желец"
+     * 3) TODO: написать класс "Квартирный дом", который наследует "Желище". есть поля "Квартира"
+     * 4) TODO: написать класс "Частный дом"
+     * 5) TODO: написать сортировщик жилищь. а) по площади, b) по году застройки, c) по кол-ву жильцов
+     */
+
 
     private static final String TAG = "MainActivity";
 
@@ -212,9 +221,9 @@ public class MainActivity extends Activity implements OnClickListener {
         //txtViewMessage.setText(indexGraphArray.toString() + ": " + String.valueOf(mTestArray.getData(indexGraphArray++ % 100)));
 
         //test сортировки michSort
-  //      TestArray someArray = new TestArray(8, 0, 100);
-  //      someArray.sort(true);
-  //      someArray.sort(false);
+        //      TestArray someArray = new TestArray(8, 0, 100);
+        //      someArray.sort(true);
+        //      someArray.sort(false);
 
 
         int[] arr = new int[]{1, 2, 3, 4, 7, 5};

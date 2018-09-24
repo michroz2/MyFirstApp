@@ -13,7 +13,6 @@ public class TestArrayTest {
         int[] arr = new int[]{2, 3, 1};
         TestArray.michSort(arr, true);
         Assert.assertArrayEquals(arr, new int[]{1, 2, 3});
-
     }
 
     @Test
