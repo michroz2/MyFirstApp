@@ -23,4 +23,6 @@ public class ExampleInstrumentedTest {
 
         assertEquals("com.example.mich.myfirstapp", appContext.getPackageName());
     }
+
+
 }
