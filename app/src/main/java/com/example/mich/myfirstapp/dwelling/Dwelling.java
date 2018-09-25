@@ -23,18 +23,14 @@ public abstract class Dwelling {
 
         int oldNumTenants = tenants.length;
 
-        // Проверяем, не живёт ли такой уже:
-        if (oldNumTenants > 0) {
-            for (int i = 0; i < tenants.length; i++) {
-                if (tenant == tenants[i]) return; // Если есть уже такой жилец, то не надо его заселять
-            }
-        }
+        if (contains(tenant)) return; // Если есть уже такой жилец, то не надо его заселять
+
         // Если нет ещё такого, то заселяем:
-            Tenant[] oldTenants = new Tenant[oldNumTenants];
-            System.arraycopy(tenants, 0, oldTenants, 0, oldNumTenants);
-            tenants = new Tenant[oldNumTenants + 1];
-            System.arraycopy(oldTenants, 0, tenants, 0, oldNumTenants);
-            tenants[tenants.length - 1] = tenant;
+        Tenant[] oldTenants = new Tenant[oldNumTenants];
+        System.arraycopy(tenants, 0, oldTenants, 0, oldNumTenants);
+        tenants = new Tenant[oldNumTenants + 1];
+        System.arraycopy(oldTenants, 0, tenants, 0, oldNumTenants);
+        tenants[tenants.length - 1] = tenant;
     }
 
     /**
