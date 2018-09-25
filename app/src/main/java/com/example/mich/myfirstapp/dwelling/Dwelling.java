@@ -27,7 +27,7 @@ public abstract class Dwelling {
         // Проверяем, не живёт ли такой уже:
         if (oldNumTenants > 0) {
             for (int i = 0; i < tenants.length; i++) {
-                already = tenant.getName().equals(tenants[i].getName());
+                already = tenant == tenants[i];
                 if (already) return;
             }
         }

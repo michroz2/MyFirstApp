@@ -11,15 +11,14 @@ public class PrivateHouseTest {
         Tenant tenant = new Tenant("Mich1");
         Tenant tenant1 = new Tenant("Mich2");
         Tenant tenant2 = new Tenant("Mich3");
-        Tenant tenant3 = new Tenant("Mich1");
-        Tenant tenant4 = new Tenant("Mich2");
+
 
 
         privateHouse.moveIn(tenant);
         privateHouse.moveIn(tenant1);
         privateHouse.moveIn(tenant2);
-        privateHouse.moveIn(tenant3);
-        privateHouse.moveIn(tenant4);
+        privateHouse.moveIn(tenant1);
+        privateHouse.moveIn(tenant2);
 
         Assert.assertEquals(privateHouse.getNumTenants(), 3);
 
