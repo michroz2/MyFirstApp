@@ -20,16 +20,15 @@ public abstract class Dwelling {
      * @param tenant -
      */
     public void moveIn(Tenant tenant) {
-
-        int oldNumTenants = tenants.length;
-
-        if (contains(tenant)) return; // Если есть уже такой жилец, то не надо его заселять
+        if (contains(tenant)) {
+            return; // Если есть уже такой жилец, то не надо его заселять
+        }
 
         // Если нет ещё такого, то заселяем:
-        Tenant[] oldTenants = new Tenant[oldNumTenants];
-        System.arraycopy(tenants, 0, oldTenants, 0, oldNumTenants);
-        tenants = new Tenant[oldNumTenants + 1];
-        System.arraycopy(oldTenants, 0, tenants, 0, oldNumTenants);
+        Tenant[] oldTenants = new Tenant[tenants.length];
+        System.arraycopy(tenants, 0, oldTenants, 0, tenants.length);
+        tenants = new Tenant[tenants.length + 1];
+        System.arraycopy(oldTenants, 0, tenants, 0, tenants.length);
         tenants[tenants.length - 1] = tenant;
     }
 
