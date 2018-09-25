@@ -15,13 +15,4 @@ public class Apartment extends Dwelling {
         this.flatNum = flatNum;
     }
 
-    @Override
-    public void moveIn(Tenant tenant) {
-        // todo: жильцов в квартиры
-    }
-
-    @Override
-    public void moveOut(Tenant tenant) {
-        // todo: жильцов из квартиры
-    }
 }

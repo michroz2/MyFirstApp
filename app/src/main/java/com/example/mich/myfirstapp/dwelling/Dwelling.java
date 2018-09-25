@@ -21,25 +21,20 @@ public abstract class Dwelling {
      */
     public void moveIn(Tenant tenant) {
 
-        boolean already = false;
         int oldNumTenants = tenants.length;
 
         // Проверяем, не живёт ли такой уже:
         if (oldNumTenants > 0) {
             for (int i = 0; i < tenants.length; i++) {
-                already = tenant == tenants[i];
-                if (already) return;
+                if (tenant == tenants[i]) return; // Если есть уже такой жилец, то не надо его заселять
             }
         }
-
         // Если нет ещё такого, то заселяем:
-        if (!already) { // TODO: если сюда дошло, то already будет ВСЕГДА false
             Tenant[] oldTenants = new Tenant[oldNumTenants];
             System.arraycopy(tenants, 0, oldTenants, 0, oldNumTenants);
             tenants = new Tenant[oldNumTenants + 1];
             System.arraycopy(oldTenants, 0, tenants, 0, oldNumTenants);
             tenants[tenants.length - 1] = tenant;
-        }
     }
 
     /**
