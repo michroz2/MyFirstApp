@@ -1,17 +1,18 @@
 package com.example.mich.myfirstapp.dwelling;
 
+/**
+ * Apartment - это единичная квартира в многоквартирном доме.
+ */
 public class Apartment extends Dwelling {
-    private final int numFlats;
-    private final int[] flats;
+    private final ApartmentHouse house;
+    private final int flatNum;
 
-    public Apartment(String address, int constructionYear, int area, int numFlats) {
-        super(address, constructionYear, area);
-        this.numFlats = numFlats;
-        flats = new int[numFlats];
-        for (int i : flats) {
-            flats[i] = i + 1;
+    static String delim = ", app#: ";
 
-        }
+    public Apartment( ApartmentHouse house, int flatNum, int flatArea) {
+        super(house.getAddress() + delim + String.valueOf(flatNum), house.getConstructionYear(), flatArea);
+        this.house = house;
+        this.flatNum = flatNum;
     }
 
     @Override
