@@ -3,33 +3,16 @@ package com.example.mich.myfirstapp.dwelling;
 /**
  * Это отдельный класс для многоквартирного дома
  */
-public class ApartmentHouse {
-    private String address;
-    private final int constructionYear;
-    private Tenant[] tenants; // Непонятно нужно ли это тут вообще, в этом виде, или двойной массив?
-    private final int totalarea;
-    private final int numFlats;
+public class ApartmentHouse extends Dwelling {
 
-    ApartmentHouse(String address, int constructionYear, int totalarea, int numFlats) {
-        this.address = address;
-        this.constructionYear = constructionYear;
-        this.totalarea = totalarea;
-        this.numFlats = numFlats;
-    }
+    private final Apartment[] apartments;
 
-    public String getAddress() {
-        return address;
-    }
+    ApartmentHouse(String address, int constructionYear, int area, int totalFlats) {
+        super(address, constructionYear, area);
+        apartments = new Apartment[totalFlats];
 
-    public int getConstructionYear() {
-        return constructionYear;
-    }
-
-    public int getTotalarea() {
-        return totalarea;
-    }
-
-    public int getNumFlats() {
-        return numFlats;
+        for (int i = 0; i < apartments.length; i++) {
+            apartments[i] = new Apartment(address, constructionYear, area / totalFlats, i);
+        }
     }
 }

@@ -5,4 +5,7 @@ public class PrivateHouse extends Dwelling {
         super(address, constructionYear, area);
     }
 
+    public void setRoofColor(int roofColor) {
+
+    }
 }

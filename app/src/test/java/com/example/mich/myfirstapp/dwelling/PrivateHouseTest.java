@@ -1,9 +1,28 @@
 package com.example.mich.myfirstapp.dwelling;
 
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
 
 public class PrivateHouseTest {
+
+    @Before
+    public void createInstance() {
+
+        PrivateHouse privateHouse = new PrivateHouse("vanasauna 7", 2017, 199);
+
+        privateHouse.moveIn(new Tenant("Andrei"));
+        privateHouse.setRoofColor(0xff0000ff);
+
+
+        ApartmentHouse apartmentHouse = new ApartmentHouse("vikerlase 13", 1990, 5000, 20);
+
+        apartmentHouse.moveIn(new Tenant("Peter"));
+
+
+    }
+
+
 
     @Test
     public void moveIn() {

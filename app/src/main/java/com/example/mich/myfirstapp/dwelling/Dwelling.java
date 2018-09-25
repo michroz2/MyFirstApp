@@ -82,4 +82,6 @@ public abstract class Dwelling {
     public int getNumTenants() {
         return tenants.length;
     }
+
+
 }
