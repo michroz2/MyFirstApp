@@ -15,4 +15,29 @@ public class ApartmentHouse extends Dwelling {
             apartments[i] = new Apartment(address, constructionYear, area / totalFlats, i);
         }
     }
+
+    @Override
+    public void moveIn(Tenant tenant) {
+        if (tenant == null) {
+            throw new RuntimeException("tenant can't be null");
+        }
+
+        for (Apartment apartment : apartments) {
+            if (apartment.getNumTenants() == 0) {
+                apartment.moveIn(tenant);
+                break;
+            }
+        }
+    }
+
+    @Override
+    public void moveOut(Tenant tenant) {
+        super.moveOut(tenant);
+        for (Apartment apartment : apartments) {
+            if (apartment.contains(tenant)) {
+                apartment.moveOut(tenant);
+
+            }
+        }
+    }
 }

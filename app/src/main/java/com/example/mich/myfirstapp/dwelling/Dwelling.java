@@ -10,8 +10,8 @@ public abstract class Dwelling {
     Dwelling(String address, int constructionYear, int area) {
         this.address = address;
         this.constructionYear = constructionYear;
-        this.tenants = new Tenant[0];
         this.area = area;
+        tenants = new Tenant[0];
     }
 
     /**
@@ -24,12 +24,14 @@ public abstract class Dwelling {
             return; // Если есть уже такой жилец, то не надо его заселять
         }
 
-        // Если нет ещё такого, то заселяем:
-        Tenant[] oldTenants = new Tenant[tenants.length];
-        System.arraycopy(tenants, 0, oldTenants, 0, tenants.length);
-        tenants = new Tenant[tenants.length + 1];
-        System.arraycopy(oldTenants, 0, tenants, 0, tenants.length);
-        tenants[tenants.length - 1] = tenant;
+        int oldNumTenants = tenants.length;
+
+
+        Tenant[] oldTenants = new Tenant[oldNumTenants];
+        System.arraycopy(tenants, 0, oldTenants, 0, oldNumTenants);
+        this.tenants = new Tenant[oldNumTenants + 1];
+        System.arraycopy(oldTenants, 0, this.tenants, 0, oldNumTenants);
+        this.tenants[tenants.length - 1] = tenant;
     }
 
     /**
@@ -70,6 +72,9 @@ public abstract class Dwelling {
      * @return <code>true</code> если есть такой жилец в жилище. <code>false</code> в противном случае
      */
     public boolean contains(Tenant tenant) {
+        if (tenants == null || tenants.length == 0) {
+            return false;
+        }
         for (Tenant t : tenants) {
             if (t == tenant) {
                 return true;
@@ -81,6 +86,14 @@ public abstract class Dwelling {
 
     public int getNumTenants() {
         return tenants.length;
+    }
+
+
+    /**
+     * @return returns address
+     */
+    public String getAddress() {
+        return address;
     }
 
 
