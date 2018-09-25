@@ -36,7 +36,15 @@ public class ApartmentHouseTest {
         }
 
 
+    }
 
+    @Test
+    public void tenantsRegistration() {
+        ApartmentHouse apartmentHouse = new ApartmentHouse('streetname, housenumber', 5000, 50);
 
+    }
+
+    @Test
+    public void moveOut() {
     }
 }

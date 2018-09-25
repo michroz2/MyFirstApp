@@ -21,16 +21,6 @@ import java.io.IOException;
 
 public class MainActivity extends Activity implements OnClickListener {
 
-
-    /**
-     * 1) DONE: Написать класс "Желец" у него есть имя
-     * 2) DONE: написать класс "Желище". У него есть адресс, жилая площадь и год постройкти. туда можно заселять "Желец"
-     * 3) DONE: написать класс "Квартирный дом", который наследует "Желище". есть поля "Квартира"
-     * 4) DONE: написать класс "Частный дом"
-     * 5) TODO: написать сортировщик жилищь. а) по площади, b) по году застройки, c) по кол-ву жильцов
-     */
-
-
     private static final String TAG = "MainActivity";
 
     private static final int REQUEST_RECORD_AUDIO_PERMISSION = 200;

@@ -15,9 +15,9 @@ public abstract class Dwelling {
     }
 
     /**
-     * Заселение жильца в дом
+     * Заселение жильца в жильё
      *
-     * @param tenant -
+     * @param tenant - жилец
      */
     public void moveIn(Tenant tenant) {
         if (contains(tenant)) {
@@ -35,9 +35,9 @@ public abstract class Dwelling {
     }
 
     /**
-     * двигает что-то в какую-то группу
+     * заселить целую группу жильцов
      *
-     * @param tenants
+     * @param tenants - массив заселяющихся жильцов
      */
     public void moveInGroup(Tenant[] tenants) {
         for (int i = 0; i < tenants.length; i++) {
@@ -96,5 +96,17 @@ public abstract class Dwelling {
         return address;
     }
 
+    /**
+     * Удалить всех жильцов из этого жилища
+     */
+    public void deleteTenants() {
+        tenants = new Tenant[0];
+    }
 
+    /**
+     * @return массив жильцов этого жилища
+     */
+    public Tenant[] getTenants() {
+        return tenants;
+    }
 }
