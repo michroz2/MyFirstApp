@@ -74,7 +74,7 @@ public class ApartmentHouse extends Dwelling {
      */
     public boolean isPossibleToMoveIn(int apartmentNum) {
         return (apartmentNum < getNumApartments());
-        
+
     }
 
     /**
