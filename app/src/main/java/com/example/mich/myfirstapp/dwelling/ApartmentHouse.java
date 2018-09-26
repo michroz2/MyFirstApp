@@ -30,7 +30,7 @@ public class ApartmentHouse extends Dwelling {
         }
 
         for (Apartment apartment : apartments) {
-            if (apartment.contains(tenant)) {
+            if (!(apartment.contains(tenant))) {
                 super.moveIn(tenant);
                 break;
             }
@@ -103,6 +103,14 @@ public class ApartmentHouse extends Dwelling {
      */
     public int getNumApartments() {
         return apartments.length;
+    }
+
+    /**
+     * @param apartmentNum - номер квартиры, которую надо получить
+     * @return одну квартиру этого дома по номеру
+     */
+    public Apartment getApartment(int apartmentNum) {
+        return apartments[apartmentNum];
     }
 
     /**

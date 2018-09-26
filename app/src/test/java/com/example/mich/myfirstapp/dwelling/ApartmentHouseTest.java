@@ -58,7 +58,35 @@ public class ApartmentHouseTest {
 
     @Test
     public void tenantsRegistration() {
-        ApartmentHouse apartmentHouse = new ApartmentHouse("streetname, housenumber", 5000, 50);
+        ApartmentHouse apartmentHouse = new ApartmentHouse("streetname, housenumber", 1997, 100, 5);
+
+        Tenant tenant0 = new Tenant("Вася 0");
+        Tenant tenant1 = new Tenant("Вася 1");
+        Tenant tenant2 = new Tenant("Вася 2");
+
+        Apartment apartment0 = apartmentHouse.getApartment(0);
+        Apartment apartment1 = apartmentHouse.getApartment(1);
+        Apartment apartment2 = apartmentHouse.getApartment(2);
+
+        apartmentHouse.moveInApartment(tenant0, 0);
+
+        Assert.assertEquals(apartmentHouse.getNumTenants(), 1);
+        Assert.assertEquals(apartment0.getNumTenants(), 1);
+
+        //partly illegal move-In: (flat-only)
+        apartment1.moveIn(tenant1);
+        Assert.assertEquals(apartmentHouse.getNumTenants(), 1);
+        //illegal move-In: (building-only)
+        apartmentHouse.moveIn(tenant2);
+        Assert.assertEquals(apartmentHouse.getNumTenants(), 2);
+
+        apartmentHouse.tenantsRegistration();
+        //Expected: Вася 0 и Вася 1 - живут и зарегистрированы, а Вася 2 выселен
+        Assert.assertEquals(apartmentHouse.getNumTenants(), 2);
+        Assert.assertTrue(apartmentHouse.livesHereByName("Вася 0"));
+        Assert.assertTrue(apartmentHouse.livesHereByName("Вася 1"));
+        Assert.assertFalse(apartmentHouse.livesHereByName("Вася 2"));
+
 
     }
 
