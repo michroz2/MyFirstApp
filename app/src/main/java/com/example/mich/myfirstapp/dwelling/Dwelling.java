@@ -1,5 +1,6 @@
 package com.example.mich.myfirstapp.dwelling;
 
+// TODO: 26-Sep-18 добавит метод поиска адреса жильца по его имени
 
 public abstract class Dwelling {
     private String address;
