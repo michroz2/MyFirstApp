@@ -103,10 +103,14 @@ public abstract class Dwelling {
         tenants = new Tenant[0];
     }
 
-    /**
+    /** Это вообще нормальный подход - возвращать массив объектов?
      * @return массив жильцов этого жилища
      */
     public Tenant[] getTenants() {
         return tenants;
+    }
+
+    public void setArea(int area) {
+        this.area = area;
     }
 }
