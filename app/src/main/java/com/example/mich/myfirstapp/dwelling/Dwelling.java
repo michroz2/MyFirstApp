@@ -1,7 +1,5 @@
 package com.example.mich.myfirstapp.dwelling;
 
-// TODO: 26-Sep-18 добавит метод поиска адреса жильца по его имени
-
 public abstract class Dwelling {
     private String address;
     private int constructionYear;
@@ -104,7 +102,9 @@ public abstract class Dwelling {
         tenants = new Tenant[0];
     }
 
-    /** Это вообще нормальный подход - возвращать массив объектов?
+    /**
+     * Это вообще нормальный подход - возвращать массив объектов?
+     *
      * @return массив жильцов этого жилища
      */
     public Tenant[] getTenants() {
@@ -114,4 +114,42 @@ public abstract class Dwelling {
     public void setArea(int area) {
         this.area = area;
     }
+
+    /**
+     * @param name - имя по которому ищутся жильцы
+     * @return количество совпадений в этом жилище
+     */
+    public int numTenantsFoundByName(String name) {
+        int result = 0;
+        for (int i = 0; i < getNumTenants(); i++) {
+            if (tenants[i].getName().equals(name)) result++;
+        }
+        return result;
+    }
+
+    /**
+     * @param name - имя по которому ищутся жильцы
+     * @return есть ли хоть 1 совпадение имени среди жильцов в этом жилище
+     */
+    public boolean livesHereByName(String name) {
+        for (int i = 0; i < getNumTenants(); i++) {
+            if (tenants[i].getName().equals(name)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * @param name
+     * @return address если Жилец с таким именем тут живёт и null если нет
+     */
+    public String getAddressByTenantName(String name) {
+        if (livesHereByName(name)) {
+            return getAddress();
+        }
+        return null;
+    }
+
 }
+
