@@ -154,7 +154,12 @@ public abstract class Dwelling {
     }
 
     public static String[] findAddressByName(String name, Dwelling... dwellings) {
-        // todo: найти жильцов в жилищах :)
+        // todo: найти адреса жильцов в жилищах по имени:)
+        return null;
+    }
+
+    public static Tenant[] findTennatsByAddress(String address, Dwelling... dwellings) {
+        // todo: найти жильцов в жилищах по адресу :)
         return null;
     }
 

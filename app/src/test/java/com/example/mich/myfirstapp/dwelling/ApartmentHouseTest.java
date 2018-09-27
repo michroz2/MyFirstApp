@@ -7,8 +7,8 @@ import org.junit.Test;
 public class ApartmentHouseTest {
 
 
-    // DONE: 27-Sep-18 написать тест для поиска адреса человека
-    // DONE: 27-Sep-18 написать тест для получения всех жильцов проживающих по адресу
+    // todo: 27-Sep-18 написать тест для поиска адреса человека
+    // todo: 27-Sep-18 написать тест для получения всех жильцов проживающих по адресу
 
     @Test
     public void getAddressByName() {
