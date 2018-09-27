@@ -3,12 +3,83 @@ package com.example.mich.myfirstapp.dwelling;
 import org.junit.Assert;
 import org.junit.Test;
 
+import java.util.ArrayList;
+
 
 public class ApartmentHouseTest {
 
 
-    // todo: 27-Sep-18 написать тест для поиска адреса человека
-    // todo: 27-Sep-18 написать тест для получения всех жильцов проживающих по адресу
+    // todo -!NOT DONE!: 27-Sep-18 написать тест для поиска адреса человека
+    // не понимаю как лист засунуть в функцию... Или что-то другое не понимаю...
+    @Test
+    public void findAddressByName() {
+        PrivateHouse eraMaja1 = new PrivateHouse("Address 1", 2001, 150);
+        PrivateHouse eraMaja2 = new PrivateHouse("Address 2", 2001, 150);
+        PrivateHouse eraMaja3 = new PrivateHouse("Address 3", 2001, 150);
+        PrivateHouse eraMaja4 = new PrivateHouse("Address 4", 2001, 150);
+        PrivateHouse eraMaja5 = new PrivateHouse("Address 5", 2001, 150);
+
+
+        eraMaja1.moveIn(new Tenant("Refugee 1"));
+        eraMaja2.moveIn(new Tenant("Refugee 2"));
+        eraMaja2.moveIn(new Tenant("Refugee 3"));
+        eraMaja3.moveIn(new Tenant("Refugee 3"));
+//        eraMaja4.moveIn(new Tenant("Refugee 4"));
+        eraMaja5.moveIn(new Tenant("Refugee 3"));
+
+        ArrayList<Dwelling> eraMajad = new ArrayList<>();
+
+        eraMajad.add(eraMaja1);
+        eraMajad.add(eraMaja2);
+        eraMajad.add(eraMaja3);
+        eraMajad.add(eraMaja4);
+        eraMajad.add(eraMaja5);
+
+
+        PrivateHouse aHouse = new PrivateHouse("doesn't matter", 3333, 2222);
+        String[] addressByName = aHouse.findAddressByName("Refugee 3", eraMajad < > );
+
+        Assert.assertTrue("3 Addresses", addressByName.length == 3);
+
+    }
+
+
+    // todo - !NOT DONE! 27-Sep-18 написать тест для получения всех жильцов проживающих по адресу
+    public void findTennatsByAddress() {
+        PrivateHouse eraMaja1 = new PrivateHouse("Address 1", 2001, 150);
+        PrivateHouse eraMaja2 = new PrivateHouse("Address 2", 2002, 150);
+        PrivateHouse eraMaja3 = new PrivateHouse("Address 1", 2003, 150);
+        PrivateHouse eraMaja4 = new PrivateHouse("Address 4", 2004, 150);
+        PrivateHouse eraMaja5 = new PrivateHouse("Address 1", 2005, 150);
+
+
+        eraMaja1.moveIn(new Tenant("Refugee 1"));
+        eraMaja2.moveIn(new Tenant("Refugee 2"));
+        eraMaja3.moveIn(new Tenant("Refugee 3"));
+        eraMaja3.moveIn(new Tenant("Refugee 4"));
+//        eraMaja4.moveIn(new Tenant("Refugee 4"));
+        eraMaja5.moveIn(new Tenant("Refugee 1"));
+        eraMaja5.moveIn(new Tenant("Refugee 3"));
+
+        ArrayList<Dwelling> eraMajad = new ArrayList<>();
+
+        eraMajad.add(eraMaja1);
+        eraMajad.add(eraMaja2);
+        eraMajad.add(eraMaja3);
+        eraMajad.add(eraMaja4);
+        eraMajad.add(eraMaja5);
+
+        // первый способ - остановится на 1-м свпадении адреса:
+        PrivateHouse aHouse = new PrivateHouse("doesn't matter", 3333, 2222);
+        Tenant[] tenantsByAddress = aHouse.findTennatsByAddress("Address 1", eraMajad < > );
+        Assert.assertTrue("1 tenant: №1", tenantsByAddress.length == 1);
+
+
+        aHouse = new PrivateHouse("doesn't matter", 3333, 2222);
+        tenantsByAddress = aHouse.findTennatsByAddress2("Address 1", eraMajad < > );
+        Assert.assertTrue("3 tenants: 1,3,4", tenantsByAddress.length == 3);
+
+    }
 
     @Test
     public void getAddressByName() {

@@ -1,5 +1,7 @@
 package com.example.mich.myfirstapp.dwelling;
 
+import java.util.ArrayList;
+
 public abstract class Dwelling {
     private String address;
     private int constructionYear;
@@ -11,6 +13,41 @@ public abstract class Dwelling {
         this.constructionYear = constructionYear;
         this.area = area;
         tenants = new Tenant[0];
+    }
+
+    public static String[] findAddressByName(String name, Dwelling... dwellings) {
+        // TODO DONE: найти адреса жильцов в жилищах по имени:)
+        ArrayList foundAddresses = new ArrayList();
+        for (Dwelling aDwelling : dwellings) {
+            if (aDwelling.livesHereByName(name)) {
+                foundAddresses.add(aDwelling.getAddress());
+            }
+        }
+        return ((String[]) foundAddresses.toArray());
+    }
+
+    public static Tenant[] findTennatsByAddress2(String address, Dwelling... dwellings) {
+        // TODO DONE: найти жильцов в жилищах по адресу - 2 :)
+        // если предполагается, что может случиться такая фигня как несколько жилищ с одинаковыми адресами
+        PrivateHouse dTerminal = new PrivateHouse("dTerminal", 1999, 5000); // пофик эти параметры...
+        for (Dwelling aDwelling : dwellings) {
+            if (aDwelling.getAddress() == address) {
+                dTerminal.moveInGroup(aDwelling.getTenants());
+                // смысл, что всех найденных "заселяем" в Д-Терминал и они там фильтруются и получается уникальный массив "задержанных"
+            }
+        }
+        return dTerminal.getTenants();
+    }
+
+    public Tenant[] findTennatsByAddress(String address, Dwelling... dwellings) {
+        // TODO DONE: найти жильцов в жилищах по адресу :)
+        // предполагается, что двух жилищ с одинаковыми адресами не бывает
+        for (Dwelling aDwelling : dwellings) {
+            if (aDwelling.getAddress() == address) {
+                return aDwelling.getTenants();
+            }
+        }
+        return null;
     }
 
     /**
@@ -82,11 +119,9 @@ public abstract class Dwelling {
         return false;
     }
 
-
     public int getNumTenants() {
         return tenants.length;
     }
-
 
     /**
      * @return returns address
@@ -150,16 +185,6 @@ public abstract class Dwelling {
         if (livesHereByName(name)) {
             return getAddress();
         }
-        return null;
-    }
-
-    public static String[] findAddressByName(String name, Dwelling... dwellings) {
-        // todo: найти адреса жильцов в жилищах по имени:)
-        return null;
-    }
-
-    public static Tenant[] findTennatsByAddress(String address, Dwelling... dwellings) {
-        // todo: найти жильцов в жилищах по адресу :)
         return null;
     }
 
