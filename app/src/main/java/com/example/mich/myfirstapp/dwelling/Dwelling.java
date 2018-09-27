@@ -154,7 +154,7 @@ public abstract class Dwelling {
     }
 
     public static String[] findAddressByName(String name, Dwelling... dwellings) {
-
+        // todo: найти жильцов в жилищах :)
         return null;
     }
 
