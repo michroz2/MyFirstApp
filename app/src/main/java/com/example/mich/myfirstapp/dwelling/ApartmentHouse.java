@@ -17,9 +17,9 @@ public class ApartmentHouse extends Dwelling {
     }
 
     /**
-     * Заселение жильца в квартирный дом ("регистрация"), при условии, что он уже заселен в какую-то квартиру этого дома
+     * Заселение жильца в квартирный дом ("регистрация"), но не в квартиру этого дома
      * Малополезный метод, доставшийся в наследство от Жилища.
-     * Используй: moveInApartment(Tenant tenant, int apartmentNum)
+     * Использовать лучше: moveInApartment(Tenant tenant, int apartmentNum)
      *
      * @param tenant - жилец
      */

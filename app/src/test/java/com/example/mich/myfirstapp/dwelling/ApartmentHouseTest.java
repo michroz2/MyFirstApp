@@ -6,9 +6,86 @@ import org.junit.Test;
 
 public class ApartmentHouseTest {
 
-    // TODO: 27-Sep-18 дописать тесты для moveOut
-    // TODO: 27-Sep-18 написать тест для поиска адреса человека
-    // TODO: 27-Sep-18 написать тест для получения всех жильцов проживающих по адресу
+    // DONE: 27-Sep-18 дописать тесты для moveOut
+    // DONE: 27-Sep-18 написать тест для поиска адреса человека
+    // DONE: 27-Sep-18 написать тест для получения всех жильцов проживающих по адресу
+
+    @Test
+    public void getAddressByName() {
+        ApartmentHouse apartmentHouse = new ApartmentHouse("Pajustiku 9", 2000, 123, 20);
+        Tenant tenant1 = new Tenant("Negro1");
+        Tenant tenant2 = new Tenant("Negro2");
+        Tenant tenant3 = new Tenant("Negro3");
+
+        apartmentHouse.moveIn(tenant1); //1
+        apartmentHouse.moveIn(tenant2); //2
+        apartmentHouse.moveIn(tenant3); //3
+
+
+        if (apartmentHouse.livesHereByName("Negro2")) {
+            Assert.assertTrue("Yes, lives here by this address", apartmentHouse.getAddress() == "Pajustiku 9");
+        }
+    }
+
+
+    @Test
+    public void getTenants() {  // может требовалось написать getTenantsByAddress() ?
+        ApartmentHouse apartmentHouse = new ApartmentHouse("Pajustiku 9", 2000, 123, 20);
+        Tenant tenant1 = new Tenant("Negro1");
+        Tenant tenant2 = new Tenant("Negro2");
+        Tenant tenant3 = new Tenant("Negro3");
+        Tenant tenant4 = new Tenant("Negro4");
+        Tenant tenant5 = new Tenant("Negro5");
+        Tenant tenant6 = new Tenant("Negro6");
+
+        apartmentHouse.moveIn(tenant1); //1
+        apartmentHouse.moveIn(tenant2); //2
+        apartmentHouse.moveIn(tenant5); //3
+
+        if (apartmentHouse.getAddress() == "Pajustiku 9") {
+
+            Tenant[] tenants;
+
+            tenants = apartmentHouse.getTenants();
+
+            Assert.assertTrue(apartmentHouse.getNumTenants() == 3);
+            Assert.assertTrue(tenants[0].getName().equals("Negro1"));
+            Assert.assertTrue(tenants[1].getName().equals("Negro2"));
+            Assert.assertTrue(tenants[2].getName().equals("Negro5"));
+        }
+    }
+
+    @Test
+    public void moveOut() {
+        ApartmentHouse apartmentHouse = new ApartmentHouse("Pajustiku 9", 2000, 123, 20);
+        Tenant tenant = new Tenant("Negro1");
+        Tenant tenant1 = new Tenant("Negro2");
+        Tenant tenant2 = new Tenant("Negro3");
+        Tenant tenantKiller = new Tenant("Killer1");
+
+        Tenant[] tenants = new Tenant[3];
+        tenants[0] = tenant;
+        tenants[1] = tenant1;
+        tenants[2] = tenant2;
+
+        apartmentHouse.moveInGroup(tenants);
+        Assert.assertTrue(apartmentHouse.getApartment(0).getNumTenants() == 0);
+        apartmentHouse.getApartment(0).moveInGroup(tenants);
+        apartmentHouse.getApartment(1).moveInGroup(tenants);
+        apartmentHouse.getApartment(2).moveInGroup(tenants);
+
+        apartmentHouse.getApartment(0).moveIn(tenantKiller);
+
+        Assert.assertEquals("Жили были 3 негритёнка...", apartmentHouse.getNumTenants(), 3);
+        apartmentHouse.moveOut(tenant1); //Один сунул пальцы в розетку...
+        Assert.assertEquals("Жили были 2 негритёнка...", apartmentHouse.getNumTenants(), 2);
+        apartmentHouse.moveOut(tenant); //Один упал с балкона...
+        Assert.assertEquals("Жили были 1 негритёнка...", apartmentHouse.getNumTenants(), 1);
+        apartmentHouse.moveOut(tenant2); //Один заснул в ванной...
+        Assert.assertEquals("Жили были 0 негритёнка...", apartmentHouse.getNumTenants(), 0);
+        apartmentHouse.tenantsRegistration(); // Но пришла полиция...
+        Assert.assertEquals("И нашла убийцу!", apartmentHouse.getNumTenants(), 1);
+    }
 
     @Test
     public void moveIn() {
@@ -22,7 +99,6 @@ public class ApartmentHouseTest {
         apartmentHouse.moveIn(tenant);
         apartmentHouse.moveIn(tenant1);
         apartmentHouse.moveIn(tenant2);
-
 
         Assert.assertEquals("aaa", apartmentHouse.getNumTenants(), 3);
         Assert.assertTrue("bbb", apartmentHouse.contains(tenant2));
@@ -92,9 +168,5 @@ public class ApartmentHouseTest {
         Assert.assertFalse(apartmentHouse.livesHereByName("Вася 2"));
 
 
-    }
-
-    @Test
-    public void moveOut() {
     }
 }
