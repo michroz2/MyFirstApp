@@ -153,5 +153,10 @@ public abstract class Dwelling {
         return null;
     }
 
+    public static String[] findAddressByName(String name) {
+
+        return null;
+    }
+
 }
 
