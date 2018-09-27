@@ -6,6 +6,10 @@ import org.junit.Test;
 
 public class ApartmentHouseTest {
 
+    // TODO: 27-Sep-18 дописать тесты для moveOut
+    // TODO: 27-Sep-18 написать тест для поиска адреса человека
+    // TODO: 27-Sep-18 написать тест для получения всех жильцов проживающих по адресу
+
     @Test
     public void moveIn() {
         ApartmentHouse apartmentHouse = new ApartmentHouse("Pajustiku 9", 2000, 123, 20);

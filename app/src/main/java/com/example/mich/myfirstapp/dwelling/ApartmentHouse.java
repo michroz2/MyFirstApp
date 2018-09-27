@@ -30,7 +30,7 @@ public class ApartmentHouse extends Dwelling {
         }
 
         for (Apartment apartment : apartments) {
-            if (!(apartment.contains(tenant))) {
+            if (!apartment.contains(tenant)) {
                 super.moveIn(tenant);
                 break;
             }

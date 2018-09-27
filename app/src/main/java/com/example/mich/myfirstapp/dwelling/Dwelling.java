@@ -122,7 +122,9 @@ public abstract class Dwelling {
     public int numTenantsFoundByName(String name) {
         int result = 0;
         for (int i = 0; i < getNumTenants(); i++) {
-            if (tenants[i].getName().equals(name)) result++;
+            if (tenants[i].getName().equals(name)) {
+                result++;
+            }
         }
         return result;
     }
