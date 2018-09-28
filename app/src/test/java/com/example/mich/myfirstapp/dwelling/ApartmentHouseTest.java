@@ -1,10 +1,14 @@
 package com.example.mich.myfirstapp.dwelling;
 
+import android.util.Log;
+
 import org.junit.Assert;
 import org.junit.Test;
 
 
 public class ApartmentHouseTest {
+
+    private static final String TAG = "ApartmentHouseTest";
 
 
     // todo -DONE: 27-Sep-18 написать тест для поиска адреса человека
@@ -17,12 +21,22 @@ public class ApartmentHouseTest {
         PrivateHouse eraMaja4 = new PrivateHouse("Address 4", 2001, 150);
         PrivateHouse eraMaja5 = new PrivateHouse("Address 5", 2001, 150);
 
+        Tenant tenant1 = new Tenant("Refugee 1");
+        Tenant tenant2 = new Tenant("Refugee 2");
+        Tenant tenant3 = new Tenant("Refugee 3");
+//        Tenant tenant4 = new Tenant("Refugee 4");
+        Tenant tenant5 = new Tenant("Refugee 5");
 
-        eraMaja1.moveIn(new Tenant("Refugee 1"));
-        eraMaja2.moveIn(new Tenant("Refugee 2"));
-        eraMaja2.moveIn(new Tenant("Refugee 3"));
+        eraMaja1.moveIn(tenant1);
+
+        eraMaja2.moveIn(tenant2);
+        eraMaja2.moveIn(tenant3);
+
         eraMaja3.moveIn(new Tenant("Refugee 3"));
-//        eraMaja4.moveIn(new Tenant("Refugee 4"));
+
+//        eraMaja4.moveIn(new Tenant("Refugee 3"));
+
+        eraMaja5.moveIn(tenant3);
         eraMaja5.moveIn(new Tenant("Refugee 3"));
 
         PrivateHouse[] majad = new PrivateHouse[]{eraMaja1, eraMaja2, eraMaja3, eraMaja4, eraMaja5};
@@ -30,6 +44,7 @@ public class ApartmentHouseTest {
         String[] addressByName = Dwelling.findAddressByName("Refugee 3", majad);
 
         Assert.assertTrue("3 Addresses", addressByName.length == 3);
+        Log.d(TAG, toString(addressByName));
 
     }
 
@@ -43,18 +58,23 @@ public class ApartmentHouseTest {
         PrivateHouse eraMaja4 = new PrivateHouse("Address 4", 2004, 150);
         PrivateHouse eraMaja5 = new PrivateHouse("Address 1", 2005, 150);
 
+        Tenant tenant1 = new Tenant("Refugee 1");
+        Tenant tenant2 = new Tenant("Refugee 2");
+        Tenant tenant3 = new Tenant("Refugee 3");
+        Tenant tenant4 = new Tenant("Refugee 4");
+        Tenant tenant5 = new Tenant("Refugee 5");
 
-        eraMaja1.moveIn(new Tenant("Refugee 1"));
+        eraMaja1.moveIn(tenant1);
 
-        eraMaja2.moveIn(new Tenant("Refugee 2"));
+        eraMaja2.moveIn(tenant2);
 
-        eraMaja3.moveIn(new Tenant("Refugee 3"));
-        eraMaja3.moveIn(new Tenant("Refugee 4"));
+        eraMaja3.moveIn(tenant3);
+        eraMaja3.moveIn(tenant4);
 
-        //        eraMaja4.moveIn(new Tenant("Refugee 4")); Для проверки на "пустое" жилище
+        //        eraMaja4.moveIn(tenant4); Для проверки на "пустое" жилище
 
-        eraMaja5.moveIn(new Tenant("Refugee 1"));
-        eraMaja5.moveIn(new Tenant("Refugee 3"));
+        eraMaja5.moveIn(tenant1);
+        eraMaja5.moveIn(tenant3);
 
         PrivateHouse[] majad = new PrivateHouse[]{eraMaja1, eraMaja2, eraMaja3, eraMaja4, eraMaja5};
 
