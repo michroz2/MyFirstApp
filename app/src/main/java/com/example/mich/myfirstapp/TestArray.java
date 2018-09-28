@@ -17,6 +17,14 @@ public class TestArray {
         }
     }
 
+    public static String implode(String[] stringArray) {
+
+        for (int i = 1; i < stringArray.length; i++) {
+            stringArray[0] += stringArray[i];
+        }
+        return stringArray[0];
+
+    }
     /**
      * возвращает элемент массива
      *

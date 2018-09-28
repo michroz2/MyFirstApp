@@ -1,7 +1,5 @@
 package com.example.mich.myfirstapp.dwelling;
 
-import android.util.Log;
-
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -9,6 +7,33 @@ import org.junit.Test;
 public class ApartmentHouseTest {
 
     private static final String TAG = "ApartmentHouseTest";
+
+    @Test
+    public void implode() {
+
+    }
+
+    @Test
+    //TODO - Разобраться в объектах:
+    public void testProc() {
+        Tenant i0 = new Tenant("0");
+        Tenant i1 = new Tenant("1");
+        Tenant i2 = new Tenant("2");
+        Tenant i3 = new Tenant("3");
+        Tenant i4 = new Tenant("4");
+
+        Tenant[] testArray = new Tenant[5];
+        testArray[0] = i0;
+        testArray[1] = i1;
+        testArray[2] = i2;
+        testArray[3] = i3;
+        testArray[4] = i4;
+
+
+        i0 = null;
+
+        Assert.assertTrue(testArray[0] == null);
+    }
 
 
     // todo -DONE: 27-Sep-18 написать тест для поиска адреса человека
@@ -44,12 +69,12 @@ public class ApartmentHouseTest {
         String[] addressByName = Dwelling.findAddressByName("Refugee 3", majad);
 
         Assert.assertTrue("3 Addresses", addressByName.length == 3);
-        Log.d(TAG, toString(addressByName));
+//        Log.d(TAG, (addressByName));
 
     }
 
 
-    // todo - !NOT DONE! 27-Sep-18 написать тест для получения всех жильцов проживающих по адресу
+    // todo - DONE 27-Sep-18 написать тест для получения всех жильцов проживающих по адресу
     @Test
     public void findTennatsByAddress() {
         PrivateHouse eraMaja1 = new PrivateHouse("Address 1", 2001, 150);
