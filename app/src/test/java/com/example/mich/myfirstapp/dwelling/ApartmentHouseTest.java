@@ -3,8 +3,6 @@ package com.example.mich.myfirstapp.dwelling;
 import org.junit.Assert;
 import org.junit.Test;
 
-import java.util.ArrayList;
-
 
 public class ApartmentHouseTest {
 
@@ -27,17 +25,9 @@ public class ApartmentHouseTest {
 //        eraMaja4.moveIn(new Tenant("Refugee 4"));
         eraMaja5.moveIn(new Tenant("Refugee 3"));
 
-        ArrayList<Dwelling> eraMajad = new ArrayList<>();
+        PrivateHouse[] majad = new PrivateHouse[]{eraMaja1, eraMaja2, eraMaja3, eraMaja4, eraMaja5};
 
-        eraMajad.add(eraMaja1);
-        eraMajad.add(eraMaja2);
-        eraMajad.add(eraMaja3);
-        eraMajad.add(eraMaja4);
-        eraMajad.add(eraMaja5);
-
-
-        PrivateHouse aHouse = new PrivateHouse("doesn't matter", 3333, 2222);
-        String[] addressByName = aHouse.findAddressByName("Refugee 3", eraMajad < > );
+        String[] addressByName = Dwelling.findAddressByName("Refugee 3", majad);
 
         Assert.assertTrue("3 Addresses", addressByName.length == 3);
 
@@ -61,22 +51,16 @@ public class ApartmentHouseTest {
         eraMaja5.moveIn(new Tenant("Refugee 1"));
         eraMaja5.moveIn(new Tenant("Refugee 3"));
 
-        ArrayList<Dwelling> eraMajad = new ArrayList<>();
+        PrivateHouse[] majad = new PrivateHouse[]{eraMaja1, eraMaja2, eraMaja3, eraMaja4, eraMaja5};
 
-        eraMajad.add(eraMaja1);
-        eraMajad.add(eraMaja2);
-        eraMajad.add(eraMaja3);
-        eraMajad.add(eraMaja4);
-        eraMajad.add(eraMaja5);
 
         // первый способ - остановится на 1-м свпадении адреса:
-        PrivateHouse aHouse = new PrivateHouse("doesn't matter", 3333, 2222);
-        Tenant[] tenantsByAddress = aHouse.findTennatsByAddress("Address 1", eraMajad < > );
+
+        Tenant[] tenantsByAddress = Dwelling.findTenantsByAddress("Address 1", majad);
         Assert.assertTrue("1 tenant: №1", tenantsByAddress.length == 1);
 
 
-        aHouse = new PrivateHouse("doesn't matter", 3333, 2222);
-        tenantsByAddress = aHouse.findTennatsByAddress2("Address 1", eraMajad < > );
+        tenantsByAddress = Dwelling.findTenatsByAddress2("Address 1", majad);
         Assert.assertTrue("3 tenants: 1,3,4", tenantsByAddress.length == 3);
 
     }
@@ -237,7 +221,5 @@ public class ApartmentHouseTest {
         Assert.assertTrue(apartmentHouse.livesHereByName("Вася 0"));
         Assert.assertTrue(apartmentHouse.livesHereByName("Вася 1"));
         Assert.assertFalse(apartmentHouse.livesHereByName("Вася 2"));
-
-
     }
 }

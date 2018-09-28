@@ -1,6 +1,7 @@
 package com.example.mich.myfirstapp.dwelling;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public abstract class Dwelling {
     private String address;
@@ -17,7 +18,7 @@ public abstract class Dwelling {
 
     public static String[] findAddressByName(String name, Dwelling... dwellings) {
         // TODO DONE: найти адреса жильцов в жилищах по имени:)
-        ArrayList foundAddresses = new ArrayList();
+        List<String> foundAddresses = new ArrayList<>();
         for (Dwelling aDwelling : dwellings) {
             if (aDwelling.livesHereByName(name)) {
                 foundAddresses.add(aDwelling.getAddress());
@@ -26,10 +27,12 @@ public abstract class Dwelling {
         return ((String[]) foundAddresses.toArray());
     }
 
-    public static Tenant[] findTennatsByAddress2(String address, Dwelling... dwellings) {
+    public static Tenant[] findTenatsByAddress2(String address, Dwelling... dwellings) {
         // TODO DONE: найти жильцов в жилищах по адресу - 2 :)
         // если предполагается, что может случиться такая фигня как несколько жилищ с одинаковыми адресами
-        PrivateHouse dTerminal = new PrivateHouse("dTerminal", 1999, 5000); // пофик эти параметры...
+        PrivateHouse dTerminal = new PrivateHouse("dTerminal", 1999, 5000); // пофик эти параметры... .. нафиг вообще нужен этот дом
+
+
         for (Dwelling aDwelling : dwellings) {
             if (aDwelling.getAddress() == address) {
                 dTerminal.moveInGroup(aDwelling.getTenants());
@@ -39,14 +42,18 @@ public abstract class Dwelling {
         return dTerminal.getTenants();
     }
 
-    public Tenant[] findTennatsByAddress(String address, Dwelling... dwellings) {
-        // TODO DONE: найти жильцов в жилищах по адресу :)
-        // предполагается, что двух жилищ с одинаковыми адресами не бывает
-        for (Dwelling aDwelling : dwellings) {
-            if (aDwelling.getAddress() == address) {
-                return aDwelling.getTenants();
-            }
-        }
+    // TODO DONE: найти всех жильцов по указанному адресу :)
+    public static Tenant[] findTenantsByAddress(String address, Dwelling... dwellings) {
+
+        // 1) получить все жилища с указанным адресом
+        // 2) вернуть всех жильцов из этого жилища
+
+
+//        for (Dwelling aDwelling : dwellings) {
+//            if (aDwelling.getAddress() == address) {
+//                return aDwelling.getTenants();
+//            }
+//        }
         return null;
     }
 
