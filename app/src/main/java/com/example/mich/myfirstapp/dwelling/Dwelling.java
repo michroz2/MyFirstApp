@@ -109,7 +109,7 @@ public abstract class Dwelling {
             return false;
         }
         for (Tenant t : tenants) {
-            if (t == tenant) {
+            if (t.equals(tenant)) {
                 return true;
             }
         }
