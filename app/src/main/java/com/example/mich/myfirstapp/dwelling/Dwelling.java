@@ -24,13 +24,17 @@ public abstract class Dwelling {
                 foundAddresses.add(aDwelling.getAddress());
             }
         }
-        return ((String[]) foundAddresses.toArray());
+        String[] result = new String[foundAddresses.size()];
+        for (int i = 0; i < result.length; i++) {
+            result[i] = foundAddresses.get(i);
+        }
+        return result;
     }
 
-    public static Tenant[] findTenatsByAddress2(String address, Dwelling... dwellings) {
+    public static Tenant[] findTenatsByAddress(String address, Dwelling... dwellings) {
         // TODO DONE: найти жильцов в жилищах по адресу - 2 :)
-        // если предполагается, что может случиться такая фигня как несколько жилищ с одинаковыми адресами
-        PrivateHouse dTerminal = new PrivateHouse("dTerminal", 1999, 5000); // пофик эти параметры... .. нафиг вообще нужен этот дом
+        // если предполагается, что может быть несколько жилищ с одинаковыми адресами
+        PrivateHouse dTerminal = new PrivateHouse("dTerminal", 1999, 5000); // пофик эти параметры... .. нафиг вообще нужен этот дом ... внизу видно:
 
 
         for (Dwelling aDwelling : dwellings) {
@@ -42,20 +46,6 @@ public abstract class Dwelling {
         return dTerminal.getTenants();
     }
 
-    // TODO DONE: найти всех жильцов по указанному адресу :)
-    public static Tenant[] findTenantsByAddress(String address, Dwelling... dwellings) {
-
-        // 1) получить все жилища с указанным адресом
-        // 2) вернуть всех жильцов из этого жилища
-
-
-//        for (Dwelling aDwelling : dwellings) {
-//            if (aDwelling.getAddress() == address) {
-//                return aDwelling.getTenants();
-//            }
-//        }
-        return null;
-    }
 
     /**
      * Заселение жильца в жильё

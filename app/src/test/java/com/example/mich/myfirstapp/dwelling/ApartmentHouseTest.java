@@ -7,7 +7,7 @@ import org.junit.Test;
 public class ApartmentHouseTest {
 
 
-    // todo -!NOT DONE!: 27-Sep-18 написать тест для поиска адреса человека
+    // todo -DONE: 27-Sep-18 написать тест для поиска адреса человека
     // не понимаю как лист засунуть в функцию... Или что-то другое не понимаю...
     @Test
     public void findAddressByName() {
@@ -35,6 +35,7 @@ public class ApartmentHouseTest {
 
 
     // todo - !NOT DONE! 27-Sep-18 написать тест для получения всех жильцов проживающих по адресу
+    @Test
     public void findTennatsByAddress() {
         PrivateHouse eraMaja1 = new PrivateHouse("Address 1", 2001, 150);
         PrivateHouse eraMaja2 = new PrivateHouse("Address 2", 2002, 150);
@@ -44,23 +45,21 @@ public class ApartmentHouseTest {
 
 
         eraMaja1.moveIn(new Tenant("Refugee 1"));
+
         eraMaja2.moveIn(new Tenant("Refugee 2"));
+
         eraMaja3.moveIn(new Tenant("Refugee 3"));
         eraMaja3.moveIn(new Tenant("Refugee 4"));
-//        eraMaja4.moveIn(new Tenant("Refugee 4"));
+
+        //        eraMaja4.moveIn(new Tenant("Refugee 4")); Для проверки на "пустое" жилище
+
         eraMaja5.moveIn(new Tenant("Refugee 1"));
         eraMaja5.moveIn(new Tenant("Refugee 3"));
 
         PrivateHouse[] majad = new PrivateHouse[]{eraMaja1, eraMaja2, eraMaja3, eraMaja4, eraMaja5};
 
 
-        // первый способ - остановится на 1-м свпадении адреса:
-
-        Tenant[] tenantsByAddress = Dwelling.findTenantsByAddress("Address 1", majad);
-        Assert.assertTrue("1 tenant: №1", tenantsByAddress.length == 1);
-
-
-        tenantsByAddress = Dwelling.findTenatsByAddress2("Address 1", majad);
+        Tenant[] tenantsByAddress = Dwelling.findTenatsByAddress("Address 1", majad);
         Assert.assertTrue("3 tenants: 1,3,4", tenantsByAddress.length == 3);
 
     }
