@@ -24,51 +24,81 @@ public class MainActivity extends Activity implements OnClickListener {
     private static final String TAG = "MainActivity";
 
     private static final int REQUEST_RECORD_AUDIO_PERMISSION = 200;
-
+    private static final int DIMENSIONS = 200;
+    private static final int MS_DELAY = 20;
     private static String fileName;
-
     TextView txtView1;
-
     ImageView imgView1;
-
     Button buttonStop;
-
     Button buttonPlay;
-
     Button buttonRecord;
-
     ImageButton imageButtonStop;
-
     ImageButton imageButtonPlay;
-
     ImageButton imageButtonRecord;
-
     ActivityState activityState;
-
     Handler timerHandler = new Handler();
+    int[] volumeArray = new int[DIMENSIONS];
+    int currentVolumeArrayPosition = 0;
+    int maxAmplitude = 0;
 
+    // Блок для вывода Максимальной Амплитуды звука при записи :
+    RecAmplitudeGraph mRecAmplitudeGraph = new RecAmplitudeGraph();
     private MediaRecorder mediaRecorder;
-
     Runnable timerRunnable = new Runnable() {
         @Override
         public void run() {
             showRecAmplitude(mediaRecorder);
-            timerHandler.postDelayed(this, 500);
+            timerHandler.postDelayed(this, MS_DELAY);
         }
     };
-    private MediaPlayer mediaPlayer;
     // for permission to RECORD_AUDIO
     private boolean permissionToRecordAccepted;
-
     private String[] permissions = {Manifest.permission.RECORD_AUDIO};
+    private MediaPlayer mediaPlayer;
 
-    private void startShowVolume() {
+    private void startShowRecAmplitude() {
+// Обнулить массив значений громкости
+        for (int i = 0; i < DIMENSIONS; i++) {
+            volumeArray[i] = 0;
+        }
+        // Запустить "таймер" для периодлического взятия значений громкости
         timerHandler.postDelayed(timerRunnable, 0);
     }
 
-    private void stopShowVolume() {
+    private void stopShowRecAmplitude() {
         timerHandler.removeCallbacks(timerRunnable);
     }
+
+    private void showRecAmplitude(MediaRecorder recorder) {
+        if (activityState == ActivityState.RECORDING) {
+            int amplitude = recorder.getMaxAmplitude();
+            Log.d(TAG, "Громкость = " + amplitude);
+            // определить максимальное значение для настройки вывода графа:
+            if (amplitude > maxAmplitude) {
+                maxAmplitude = amplitude;
+                mRecAmplitudeGraph.setMaxValue(amplitude);
+            }
+
+            // вставить значение амплитуды в массив на текущее место:
+            volumeArray[currentVolumeArrayPosition] = amplitude;
+            currentVolumeArrayPosition++;
+            currentVolumeArrayPosition %= DIMENSIONS;
+            // вывести массив значений громкости в графическое окно
+            showGraphArray();
+
+            // показать текст Амплитуды в текстовом окне
+//            txtView1.setText("Vol: " + amplitude);
+
+        }
+    }
+
+    private void showGraphArray() {
+        // Передать массив, заставить перерисовать и показать массив линий соответствующих громкости, начиная с текущего элемента:
+        mRecAmplitudeGraph.setDrawArray(volumeArray);
+        imgView1.invalidateDrawable(mRecAmplitudeGraph);
+        imgView1.setImageDrawable(mRecAmplitudeGraph);
+    }
+// Конец Блока для вывода Максимальной Амплитуды звука при записи
 
     private void startRecording(String mFileName) {
         mediaRecorder = new MediaRecorder();
@@ -126,7 +156,6 @@ public class MainActivity extends Activity implements OnClickListener {
         Log.d(TAG, "on create");
 
         setContentView(R.layout.activity_main);
-
         ActivityCompat.requestPermissions(this, permissions, REQUEST_RECORD_AUDIO_PERMISSION);
 
         // Record to the external cache directory for visibility
@@ -221,34 +250,27 @@ public class MainActivity extends Activity implements OnClickListener {
         //      someArray.sort(false);
 
 
+/*
         int[] arr = new int[]{1, 2, 3, 4, 7, 5};
-        printIntArray(arr, "массив перед сортировкой");
+        logPrintIntArray(arr, "массив перед сортировкой");
         TestArray.michSort(arr, false);
-        printIntArray(arr, "массив после сортировки");
+        logPrintIntArray(arr, "массив после сортировки");
 
+*/
         // Тест для imageView
 
 
     }
 
-    private void showRecAmplitude(MediaRecorder recorder) {
-        if (activityState == ActivityState.RECORDING) {
-            int amplitude = recorder.getMaxAmplitude();
-            Log.d(TAG, "Громкость = " + amplitude);
-            // показать текст Амплитуды
-            txtView1.setText("Vol: " + amplitude);
-        }
-    }
-
-    private void printIntArray(int[] arr, String comment) {
+    private void logPrintIntArray(int[] arr, String comment) {
         Log.d(TAG, "\n=============================");
         Log.d(TAG, comment);
         Log.d(TAG, "=============================");
-        printIntArray(arr);
+        logPrintIntArray(arr);
         Log.d(TAG, "\n");
     }
 
-    private void printIntArray(int[] arr) {
+    private void logPrintIntArray(int[] arr) {
         for (int a : arr) {
             Log.d(TAG, String.valueOf(a));
         }
@@ -284,7 +306,7 @@ public class MainActivity extends Activity implements OnClickListener {
                 //остановить либо запись либо воспроизведение - что там сейчас идёт
                 switch (activityState) {
                     case RECORDING:
-                        stopShowVolume();
+                        stopShowRecAmplitude();
                         stopRecording();
                         break;
                     case PLAYING:
@@ -297,7 +319,7 @@ public class MainActivity extends Activity implements OnClickListener {
             case R.id.imageButtonRec:
                 Log.d(TAG, "record");
                 startRecording(fileName);
-                startShowVolume();
+                startShowRecAmplitude();
                 break;
         }
     }

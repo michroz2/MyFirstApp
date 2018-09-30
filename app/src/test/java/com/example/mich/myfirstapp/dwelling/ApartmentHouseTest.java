@@ -1,5 +1,7 @@
 package com.example.mich.myfirstapp.dwelling;
 
+import com.example.mich.myfirstapp.TestArray;
+
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -10,11 +12,12 @@ public class ApartmentHouseTest {
 
     @Test
     public void implode() {
-
+        String[] stringArray = new String[]{"1", "2", "3", "4", "5"};
+        String imp = TestArray.implode(stringArray);
+        Assert.assertTrue(imp.equals("12345"));
     }
 
     @Test
-    //TODO - Разобраться в объектах:
     public void testProc() {
         Tenant i0 = new Tenant("0");
         Tenant i1 = new Tenant("1");
@@ -32,7 +35,7 @@ public class ApartmentHouseTest {
 
         i0 = null;
 
-        Assert.assertTrue(testArray[0] == null);
+        Assert.assertFalse(testArray[0] == null);
     }
 
 
@@ -69,7 +72,7 @@ public class ApartmentHouseTest {
         String[] addressByName = Dwelling.findAddressByName("Refugee 3", majad);
 
         Assert.assertTrue("3 Addresses", addressByName.length == 3);
-//        Log.d(TAG, (addressByName));
+        //       Log.d(TAG, System.out.println(addressByName));
 
     }
 
@@ -128,7 +131,7 @@ public class ApartmentHouseTest {
 
 
     @Test
-    public void getTenants() {  // может требовалось написать getTenantsByAddress() ?
+    public void getTenants() {
         ApartmentHouse apartmentHouse = new ApartmentHouse("Pajustiku 9", 2000, 123, 20);
         Tenant tenant1 = new Tenant("Negro1");
         Tenant tenant2 = new Tenant("Negro2");
@@ -141,11 +144,9 @@ public class ApartmentHouseTest {
         apartmentHouse.moveIn(tenant2); //2
         apartmentHouse.moveIn(tenant5); //3
 
-        if (apartmentHouse.getAddress() == "Pajustiku 9") {
+        if (apartmentHouse.getAddress().equals("Pajustiku 9")) {
 
-            Tenant[] tenants;
-
-            tenants = apartmentHouse.getTenants();
+            Tenant[] tenants = apartmentHouse.getTenants();
 
             Assert.assertTrue(apartmentHouse.getNumTenants() == 3);
             Assert.assertTrue(tenants[0].getName().equals("Negro1"));

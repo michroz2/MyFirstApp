@@ -61,7 +61,7 @@ public class ApartmentHouse extends Dwelling {
      * @param appartmentNum - номер квартиры в которую заселяем
      */
     public void moveInApartment(Tenant tenant, int appartmentNum) {
-        if (isPossibleToMoveIn(appartmentNum)) {
+        if (existsApartment(appartmentNum)) {
             apartments[appartmentNum].moveIn(tenant);
             this.moveIn(tenant); // Надёжнее (но наверняка медленнее) сделать тут tenantsRegistration()
         }
@@ -72,7 +72,7 @@ public class ApartmentHouse extends Dwelling {
      * @return можно ли туда заселить жильца
      * пока проверяется только что такой номер квартиры есть, но может добавиться что-то ещё
      */
-    public boolean isPossibleToMoveIn(int apartmentNum) {
+    public boolean existsApartment(int apartmentNum) {
         return (apartmentNum < getNumApartments());
 
     }

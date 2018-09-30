@@ -18,11 +18,11 @@ public class TestArray {
     }
 
     public static String implode(String[] stringArray) {
-
-        for (int i = 1; i < stringArray.length; i++) {
-            stringArray[0] += stringArray[i];
+        String result = "";
+        for (int i = 0; i < stringArray.length; i++) {
+            result += stringArray[i];
         }
-        return stringArray[0];
+        return result;
 
     }
     /**
