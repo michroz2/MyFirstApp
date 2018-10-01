@@ -12,10 +12,9 @@ public class RecAmplitudeGraph extends Drawable {
     private static final String TAG = "RecAmplitudeGraph";
     private final Paint mPaint;
     private final Paint mBackgroundColor;
-    private int width;
-    private int height;
+    private final Paint mRedPaint;
     private int[] drawArray;
-    private int maxValue = 1;
+    private int maxValue = 1; // Это простой способ избежать деления на 0, поскольку это значение будет в знаменателе
     private int positionCounter = 0;
 
 
@@ -24,6 +23,8 @@ public class RecAmplitudeGraph extends Drawable {
         mPaint.setARGB(255, 0, 0, 255);
         mBackgroundColor = new Paint();
         mBackgroundColor.setARGB(255, 255, 255, 255);
+        mRedPaint = new Paint();
+        mRedPaint.setARGB(255, 255, 0, 0);
     }
 
     /**
@@ -34,22 +35,28 @@ public class RecAmplitudeGraph extends Drawable {
      */
     @Override
     public void draw(@NonNull Canvas canvas) {
-//        Log.d(TAG, "draw" + positionCounter++);
-
+//        Log.d(TAG, "draw" + positionCounter);
+        positionCounter++;
         // Get the drawable's bounds
-        width = getBounds().width();
-        height = getBounds().height();
+        int width = getBounds().width();
+        int height = getBounds().height();
         int numCells = drawArray.length;
         canvas.drawRect(0, 0, width, height, mBackgroundColor);
 
 
         for (int i = 0; i < numCells; i++) {
             // Draw a graph rectangle
-            float left = (width * i) / numCells;
-            float top = height - (height * drawArray[(i + positionCounter) % numCells]) / maxValue;
-            float right = (width * (i + 1)) / numCells;
-            float bottom = height;
-            canvas.drawRect(left, top, right, bottom, mPaint);
+            int value = drawArray[(i + positionCounter) % numCells];
+            Paint drawPaint = mPaint;
+            if (value == 0) {
+                value = maxValue;
+                drawPaint = mRedPaint;
+            }
+            int left = (width * i) / numCells;
+            int top = height - (height * value) / maxValue;
+            int right = (width * (i + 1)) / numCells;
+//            int bottom = height;
+            canvas.drawRect(left, top, right, height, drawPaint);
         }
 
     }
