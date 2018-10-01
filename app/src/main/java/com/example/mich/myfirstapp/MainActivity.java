@@ -81,23 +81,21 @@ public class MainActivity extends Activity implements OnClickListener {
 
             // вставить значение амплитуды в массив на текущее место:
             volumeArray[currentVolumeArrayPosition] = amplitude;
+            // передвинуть "текущее место" для следующей записи:
             currentVolumeArrayPosition++;
             currentVolumeArrayPosition %= DIMENSIONS;
-            // вывести массив значений громкости в графическое окно
-            showGraphArray();
+
+            // Передать массив, заставить перерисовать и показать массив соответствующий громкости:
+            mRecAmplitudeGraph.setDrawArray(volumeArray);
+            imgView1.invalidateDrawable(mRecAmplitudeGraph);
+            imgView1.setImageDrawable(mRecAmplitudeGraph);
 
             // показать текст Амплитуды в текстовом окне
-//            txtView1.setText("Vol: " + amplitude);
+            txtView1.setText("Vol: " + amplitude);
 
         }
     }
 
-    private void showGraphArray() {
-        // Передать массив, заставить перерисовать и показать массив линий соответствующих громкости, начиная с текущего элемента:
-        mRecAmplitudeGraph.setDrawArray(volumeArray);
-        imgView1.invalidateDrawable(mRecAmplitudeGraph);
-        imgView1.setImageDrawable(mRecAmplitudeGraph);
-    }
 // Конец Блока для вывода Максимальной Амплитуды звука при записи
 
     private void startRecording(String mFileName) {
