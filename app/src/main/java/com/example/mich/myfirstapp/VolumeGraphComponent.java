@@ -7,18 +7,20 @@ import android.graphics.PixelFormat;
 import android.graphics.drawable.Drawable;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.util.Log;
 
-public class RecAmplitudeGraph extends Drawable {
-    private static final String TAG = "RecAmplitudeGraph";
+public class VolumeGraphComponent extends Drawable {
+    private static final String TAG = "VolumeGraphComponent";
     private final Paint mPaint;
     private final Paint mBackgroundColor;
     private final Paint mRedPaint;
     private int[] drawArray;
     private int maxValue = 1; // Это простой способ избежать деления на 0, поскольку это значение будет в знаменателе
     private int positionCounter = 0;
+    private ValueReceiver valueReceiver;
 
 
-    public RecAmplitudeGraph() {
+    VolumeGraphComponent() {
         mPaint = new Paint();
         mPaint.setARGB(255, 0, 0, 255);
         mBackgroundColor = new Paint();
@@ -35,29 +37,33 @@ public class RecAmplitudeGraph extends Drawable {
      */
     @Override
     public void draw(@NonNull Canvas canvas) {
-//        Log.d(TAG, "draw" + positionCounter);
-        positionCounter++;
-        // Get the drawable's bounds
-        int width = getBounds().width();
-        int height = getBounds().height();
-        int numCells = drawArray.length;
-        canvas.drawRect(0, 0, width, height, mBackgroundColor);
 
 
-        for (int i = 0; i < numCells; i++) {
-            // Draw a graph rectangle
-            int value = drawArray[(i + positionCounter) % numCells];
-            Paint drawPaint = mPaint;
-            if (value == 0) {
-                value = maxValue;
-                drawPaint = mRedPaint;
-            }
-            int left = (width * i) / numCells;
-            int top = height - (height * value) / maxValue;
-            int right = (width * (i + 1)) / numCells;
-//            int bottom = height;
-            canvas.drawRect(left, top, right, height, drawPaint);
-        }
+        Log.d(TAG, "draw");
+//        positionCounter++;
+//        // Get the drawable's bounds
+//        int width = getBounds().width();
+//        int height = getBounds().height();
+//        int numCells = drawArray.length;
+//        canvas.drawRect(0, 0, width, height, mBackgroundColor);
+//
+//        int val = valueReceiver.getValue();
+//
+//
+//        for (int i = 0; i < numCells; i++) {
+//            // Draw a graph rectangle
+//            int value = drawArray[(i + positionCounter) % numCells];
+//            Paint drawPaint = mPaint;
+//            if (value == 0) {
+//                value = maxValue;
+//                drawPaint = mRedPaint;
+//            }
+//            int left = (width * i) / numCells;
+//            int top = height - (height * value) / maxValue;
+//            int right = (width * (i + 1)) / numCells;
+////            int bottom = height;
+//            canvas.drawRect(left, top, right, height, drawPaint);
+//        }
 
     }
 
@@ -99,5 +105,10 @@ public class RecAmplitudeGraph extends Drawable {
 
     public void setMaxValue(int maxValue) {
         this.maxValue = maxValue;
+    }
+
+    public void link(ValueReceiver valueReceiver) {
+
+        this.valueReceiver = valueReceiver;
     }
 }
