@@ -29,7 +29,7 @@ public class MainActivity extends Activity implements OnClickListener {
 
     TextView txtView1;
 
-    ImageView imgView1;
+    ImageView imgViewGraph;
 
     ImageButton imageButtonStop;
     ImageButton imageButtonPlay;
@@ -39,18 +39,20 @@ public class MainActivity extends Activity implements OnClickListener {
 
     Handler timerHandler = new Handler();
 
-
     JukeBox jukeBox;
+    MainactivityStopper mainactivityStopper;
 
     VolumeGraphComponent graphComponent;
+
     Runnable refreshTimer = new Runnable() {
         @Override
         public void run() {
-            imgView1.invalidateDrawable(graphComponent);
-
+            imgViewGraph.invalidateDrawable(graphComponent);
+            imgViewGraph.setImageDrawable(graphComponent);
             timerHandler.postDelayed(this, REFRESH_TIME);
         }
     };
+
     // for permission to RECORD_AUDIO
     private boolean permissionToRecordAccepted;
     private String[] permissions = {Manifest.permission.RECORD_AUDIO};
@@ -58,20 +60,19 @@ public class MainActivity extends Activity implements OnClickListener {
 
     public MainActivity() {
         graphComponent = new VolumeGraphComponent();
-
-        jukeBox = JukeBox.getJukeBox();
+        mainactivityStopper = new MainactivityStopper(this);
+        jukeBox = new JukeBox(mainactivityStopper);
 
         graphComponent.link(jukeBox);
 
-
     }
 
-    private void startShowRecAmplitude() {
+    private void startShowVolumeGraph() {
         // Запустить "таймер" для периодлического взятия значений громкости
         timerHandler.postDelayed(refreshTimer, 0);
     }
 
-    private void stopShowRecAmplitude() {
+    private void stopShowVolumeGraph() {
         timerHandler.removeCallbacks(refreshTimer);
     }
 
@@ -93,8 +94,8 @@ public class MainActivity extends Activity implements OnClickListener {
 //
 //            // Передать массив, заставить перерисовать и показать массив соответствующий громкости:
 //            mRecAmplitudeGraph.setDrawArray(volumeArray);
-//            imgView1.invalidateDrawable(mRecAmplitudeGraph);
-//            imgView1.setImageDrawable(mRecAmplitudeGraph);
+//            imgViewGraph.invalidateDrawable(mRecAmplitudeGraph);
+//            imgViewGraph.setImageDrawable(mRecAmplitudeGraph);
 
             // показать текст Амплитуды в текстовом окне
             txtView1.setText("Vol: " + amplitude);
@@ -110,6 +111,7 @@ public class MainActivity extends Activity implements OnClickListener {
     }
 
     private void stopRecording() {
+        jukeBox.stopRecording();
         updateState(ActivityState.STOPPED);
     }
 
@@ -136,7 +138,7 @@ public class MainActivity extends Activity implements OnClickListener {
 
         txtView1 = findViewById(R.id.textView);
 
-        imgView1 = findViewById(R.id.imageView);
+        imgViewGraph = findViewById(R.id.imageView);
 
 
         imageButtonStop = findViewById(R.id.imageButtonStop);
@@ -183,7 +185,7 @@ public class MainActivity extends Activity implements OnClickListener {
         super.onStop();
         Log.d(TAG, "on stop");
 
-        jukeBox.release();
+        jukeBox.releaseMediaDevices();
 
 
     }
@@ -217,33 +219,35 @@ public class MainActivity extends Activity implements OnClickListener {
     public void onClick(View view) {
 
         switch (view.getId()) {
-            case R.id.buttonPlay:
             case R.id.imageButtonPlay:
                 Log.d(TAG, "play");
                 // начать воспроизведение последней записи.
                 startPlaying(fileName);
                 break;
 
-            case R.id.buttonStop:
             case R.id.imageButtonStop:
-                Log.d(TAG, "stop");
-                //остановить либо запись либо воспроизведение - что там сейчас идёт
-                switch (activityState) {
-                    case RECORDING:
-                        stopShowRecAmplitude();
-                        stopRecording();
-                        break;
-                    case PLAYING:
-                        stopPlaying();
-                        break;
-                }
+                makeStop();
                 break;
 
-            case R.id.buttonRec:
             case R.id.imageButtonRec:
                 Log.d(TAG, "record");
                 startRecording(fileName);
-                startShowRecAmplitude();
+                startShowVolumeGraph();
+                break;
+        }
+    }
+
+
+    public void makeStop() {
+        Log.d(TAG, "stop");
+        //остановить либо запись либо воспроизведение - смотря что там сейчас идёт
+        switch (activityState) {
+            case RECORDING:
+                stopShowVolumeGraph();
+                stopRecording();
+                break;
+            case PLAYING:
+                stopPlaying();
                 break;
         }
     }

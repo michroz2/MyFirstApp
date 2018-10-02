@@ -11,16 +11,10 @@ public class JukeBox implements ValueReceiver {
     private static JukeBox instance;
     private MediaRecorder mediaRecorder;
     private MediaPlayer mediaPlayer;
+    private ShowStopper showStopper;
 
-    private JukeBox() {
-
-    }
-
-    static JukeBox getJukeBox() {
-        if (instance == null) {
-            instance = new JukeBox();
-        }
-        return instance;
+    JukeBox(ShowStopper showStopper) {
+        this.showStopper = showStopper;
     }
 
     public void startRecording(String mFileName) {
@@ -34,7 +28,7 @@ public class JukeBox implements ValueReceiver {
         try {
             mediaRecorder.prepare();
         } catch (IOException e) {
-            Log.e(TAG, "prepare() failed");
+            Log.e(TAG, "prepare mediaRecorder failed");
         }
 
         mediaRecorder.start();
@@ -42,8 +36,7 @@ public class JukeBox implements ValueReceiver {
 
     public void stopRecording() {
         mediaRecorder.stop();
-        mediaRecorder.release();
-        mediaRecorder = null;
+        releaseMediaDevices();
     }
 
     public void startPlaying(String mFileName) {
@@ -59,20 +52,21 @@ public class JukeBox implements ValueReceiver {
                     stopPlaying();
                 }
             });
+//TODO - Как переключить ActivityState в положение STOPPED?
 
         } catch (IOException e) {
-            Log.e(TAG, "prepare() failed");
+            Log.e(TAG, "mediaPlayer failed");
             stopPlaying();
         }
     }
 
-
     public void stopPlaying() {
-        mediaPlayer.release();
-        mediaPlayer = null;
+        mediaPlayer.stop();
+        releaseMediaDevices();
+        showStopper.makeStop();
     }
 
-    public void release() {
+    public void releaseMediaDevices() {
         if (mediaRecorder != null) {
             mediaRecorder.release();
             mediaRecorder = null;
