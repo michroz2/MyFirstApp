@@ -16,17 +16,18 @@ public class VolumeGraphComponent extends Drawable {
     private final Paint mRedPaint;
     private int[] drawArray;
     private int maxValue = 1; // Это простой способ избежать деления на 0, поскольку это значение будет в знаменателе
-    private int positionCounter = 0;
+    private int positionCounter;
     private ValueReceiver valueReceiver;
 
 
-    VolumeGraphComponent() {
+    VolumeGraphComponent(int dimensions) {
         mPaint = new Paint();
         mPaint.setARGB(255, 0, 0, 255);
         mBackgroundColor = new Paint();
         mBackgroundColor.setARGB(255, 255, 255, 255);
         mRedPaint = new Paint();
         mRedPaint.setARGB(255, 255, 0, 0);
+        setDrawArrayLength(dimensions);
     }
 
     /**
@@ -38,32 +39,40 @@ public class VolumeGraphComponent extends Drawable {
     @Override
     public void draw(@NonNull Canvas canvas) {
 
-
         Log.d(TAG, "draw");
-//        positionCounter++;
-//        // Get the drawable's bounds
-//        int width = getBounds().width();
-//        int height = getBounds().height();
-//        int numCells = drawArray.length;
-//        canvas.drawRect(0, 0, width, height, mBackgroundColor);
-//
-//        int val = valueReceiver.getValue();
-//
-//
-//        for (int i = 0; i < numCells; i++) {
-//            // Draw a graph rectangle
-//            int value = drawArray[(i + positionCounter) % numCells];
-//            Paint drawPaint = mPaint;
-//            if (value == 0) {
-//                value = maxValue;
-//                drawPaint = mRedPaint;
-//            }
-//            int left = (width * i) / numCells;
-//            int top = height - (height * value) / maxValue;
-//            int right = (width * (i + 1)) / numCells;
-////            int bottom = height;
-//            canvas.drawRect(left, top, right, height, drawPaint);
-//        }
+
+        // Get the drawable's bounds
+        int width = getBounds().width();
+        int height = getBounds().height();
+        int numCells = drawArray.length;
+
+// Затираем предыдущую картинку
+        canvas.drawRect(0, 0, width, height, mBackgroundColor);
+
+// Получаем новое значение громкости:
+        int newValue = valueReceiver.getValue();
+// апдэйтим махимальное значение:
+        maxValue = (newValue > maxValue) ? newValue : maxValue;
+// Записываем значение в текущий элемент массива...
+        drawArray[positionCounter] = newValue;
+// ...а рисовать будем начиная со следующего элемента - текущий окажется в самом конце:
+        positionCounter = (positionCounter + 1) % numCells;
+
+        for (int i = 0; i < numCells; i++) {
+            // Draw one value as a rectangle
+            int value = drawArray[(i + positionCounter) % numCells];
+            Paint drawPaint = mPaint;
+            if (value == 0) {
+                value = maxValue;
+                drawPaint = mRedPaint;
+            }
+            int left = (width * i) / numCells;
+            int top = height - (height * value) / maxValue;
+            int right = (width * (i + 1)) / numCells;
+//            int bottom = height;
+            canvas.drawRect(left, top, right, height, drawPaint);
+
+        }
 
     }
 
@@ -99,11 +108,11 @@ public class VolumeGraphComponent extends Drawable {
         return PixelFormat.OPAQUE;
     }
 
-    public void setDrawArray(int[] drawArray) {
-        this.drawArray = drawArray;
+    public void setDrawArrayLength(int length) {
+        drawArray = new int[length];
     }
 
-    public void setMaxValue(int maxValue) {
+    void setMaxValue(int maxValue) {
         this.maxValue = maxValue;
     }
 

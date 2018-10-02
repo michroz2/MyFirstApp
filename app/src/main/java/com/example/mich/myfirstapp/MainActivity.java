@@ -23,7 +23,7 @@ public class MainActivity extends Activity implements OnClickListener {
 
     private static final int DIMENSIONS = 200;
 
-    private static final int REFRESH_TIME = 2000;
+    private static final int REFRESH_TIME = 40;
 
     private static String fileName;
 
@@ -59,7 +59,7 @@ public class MainActivity extends Activity implements OnClickListener {
 
 
     public MainActivity() {
-        graphComponent = new VolumeGraphComponent();
+        graphComponent = new VolumeGraphComponent(DIMENSIONS);
         mainactivityStopper = new MainactivityStopper(this);
         jukeBox = new JukeBox(mainactivityStopper);
 

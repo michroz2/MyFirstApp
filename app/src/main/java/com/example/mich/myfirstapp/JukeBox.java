@@ -35,8 +35,10 @@ public class JukeBox implements ValueReceiver {
     }
 
     public void stopRecording() {
-        mediaRecorder.stop();
-        releaseMediaDevices();
+        if (mediaRecorder != null) {
+            mediaRecorder.stop();
+            releaseMediaDevices();
+        }
     }
 
     public void startPlaying(String mFileName) {
@@ -61,9 +63,11 @@ public class JukeBox implements ValueReceiver {
     }
 
     public void stopPlaying() {
-        mediaPlayer.stop();
-        releaseMediaDevices();
-        showStopper.makeStop();
+        if (mediaPlayer != null) {
+            mediaPlayer.stop();
+            releaseMediaDevices();
+            showStopper.makeStop();
+        }
     }
 
     public void releaseMediaDevices() {
