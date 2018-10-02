@@ -3,7 +3,6 @@ package com.example.mich.myfirstapp;
 import android.Manifest;
 import android.app.Activity;
 import android.content.pm.PackageManager;
-import android.media.MediaRecorder;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
@@ -75,35 +74,6 @@ public class MainActivity extends Activity implements OnClickListener {
     private void stopShowVolumeGraph() {
         timerHandler.removeCallbacks(refreshTimer);
     }
-
-    private void showRecAmplitude(MediaRecorder recorder) {
-        if (activityState == ActivityState.RECORDING) {
-            int amplitude = recorder.getMaxAmplitude();
-//            Log.d(TAG, "Громкость = " + amplitude);
-//            // определить максимальное значение для настройки вывода графа:
-//            if (amplitude > maxAmplitude) {
-//                maxAmplitude = amplitude;
-//                mRecAmplitudeGraph.setMaxValue(amplitude);
-//            }
-//
-//            // вставить значение амплитуды в массив на текущее место:
-//            volumeArray[currentVolumeArrayPosition] = amplitude;
-//            // передвинуть "текущее место" для следующей записи:
-//            currentVolumeArrayPosition++;
-//            currentVolumeArrayPosition %= DIMENSIONS;
-//
-//            // Передать массив, заставить перерисовать и показать массив соответствующий громкости:
-//            mRecAmplitudeGraph.setDrawArray(volumeArray);
-//            imgViewGraph.invalidateDrawable(mRecAmplitudeGraph);
-//            imgViewGraph.setImageDrawable(mRecAmplitudeGraph);
-
-            // показать текст Амплитуды в текстовом окне
-            txtView1.setText("Vol: " + amplitude);
-
-        }
-    }
-
-// Конец Блока для вывода Максимальной Амплитуды звука при записи
 
     private void startRecording(String mFileName) {
         jukeBox.startRecording(mFileName);
@@ -194,9 +164,6 @@ public class MainActivity extends Activity implements OnClickListener {
     public void onUserInteraction() {
         super.onUserInteraction();
         Log.d(TAG, "on UserInteraction");
-
-        //
-        //  showRecAmplitude(mediaRecorder); // если конечно при этом идёт запись, иначе ничего не выйдет
 
 
     }
