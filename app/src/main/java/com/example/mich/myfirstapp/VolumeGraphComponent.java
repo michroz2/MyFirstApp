@@ -15,7 +15,7 @@ public class VolumeGraphComponent extends Drawable {
     private final Paint mBackgroundColor;
     private final Paint mRedPaint;
     private int[] drawArray;
-    private int maxValue = 1; // Это простой способ избежать деления на 0, поскольку это значение будет в знаменателе
+    private int maxValue = 1; // Это тупой способ избежать деления на 0, поскольку это значение будет в знаменателе
     private int positionCounter;
 
     public interface ValueReceiver {

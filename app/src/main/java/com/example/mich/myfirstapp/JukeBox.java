@@ -3,6 +3,7 @@ package com.example.mich.myfirstapp;
 import android.media.MediaPlayer;
 import android.media.MediaRecorder;
 import android.util.Log;
+
 import com.example.mich.myfirstapp.VolumeGraphComponent.ValueReceiver;
 
 import java.io.IOException;
@@ -12,6 +13,9 @@ public class JukeBox implements ValueReceiver {
 
     private MediaRecorder mediaRecorder;
     private MediaPlayer mediaPlayer;
+
+    private DataFileComponent dataFileComponent;
+    private String dataFileName;
 
     private MediaPlayerStopListener playerStopListener;
 
@@ -27,6 +31,15 @@ public class JukeBox implements ValueReceiver {
 
 
     public void startRecording(String mFileName) {
+
+        dataFileComponent = new DataFileComponent();
+        // Output file for Volume data
+        // Интересно куда теперь напишут этот файл и можно ли его достать будет?..
+//        dataFileName = Environment.getExternalStorageDirectory().getAbsolutePath() + "/audiorecord.csv";
+        dataFileName = "/sdcard/Temp/audiorecord.csv";
+        dataFileComponent.startRecording(dataFileName);
+
+
         mediaRecorder = new MediaRecorder();
 
         mediaRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
@@ -48,6 +61,7 @@ public class JukeBox implements ValueReceiver {
             mediaRecorder.stop();
             releaseMediaDevices();
         }
+        dataFileComponent.stopRecording();
     }
 
     public void startPlaying(String mFileName) {
@@ -63,7 +77,6 @@ public class JukeBox implements ValueReceiver {
                     stopPlaying();
                 }
             });
-//TODO - Как переключить ActivityState в положение STOPPED?
 
         } catch (IOException e) {
             Log.e(TAG, "mediaPlayer failed");
@@ -71,7 +84,7 @@ public class JukeBox implements ValueReceiver {
         }
     }
 
-    public void setMediaPlaerStopListener(MediaPlayerStopListener listener) {
+    public void setMediaPlayerStopListener(MediaPlayerStopListener listener) {
         playerStopListener = listener;
     }
 
@@ -90,7 +103,9 @@ public class JukeBox implements ValueReceiver {
 
     @Override
     public int getValue() {
-        return mediaRecorder == null ? 0 : mediaRecorder.getMaxAmplitude();
+        int result = (mediaRecorder == null) ? 0 : mediaRecorder.getMaxAmplitude();
+        dataFileComponent.write(result);
+        return result;
     }
 
     public interface MediaPlayerStopListener {

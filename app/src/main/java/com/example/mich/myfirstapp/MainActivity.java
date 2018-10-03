@@ -3,9 +3,11 @@ package com.example.mich.myfirstapp;
 import android.Manifest;
 import android.app.Activity;
 import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
+import android.support.annotation.RequiresApi;
 import android.support.v4.app.ActivityCompat;
 import android.util.Log;
 import android.view.View;
@@ -13,36 +15,37 @@ import android.view.View.OnClickListener;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+
 import com.example.mich.myfirstapp.JukeBox.MediaPlayerStopListener;
 
+@RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
 public class MainActivity extends Activity implements OnClickListener {
 
     private static final String TAG = "MainActivity";
 
+    // for permission to RECORD_AUDIO
     private static final int REQUEST_RECORD_AUDIO_PERMISSION = 200;
+    private static final int REQUEST_EXTERNAL_STORAGE = 1;
+    private static String[] PERMISSIONS_STORAGE = {
+            Manifest.permission.READ_EXTERNAL_STORAGE,
+            Manifest.permission.WRITE_EXTERNAL_STORAGE
+    };
+    private static String recFileName;
+    private boolean permissionToRecordAccepted;
 
     private static final int DIMENSIONS = 200;
 
     private static final int REFRESH_TIME = 40;
-
-    private static String fileName;
-
+    private String[] permissionsRECORD_AUDIO = {Manifest.permission.RECORD_AUDIO};
     TextView txtView1;
-
     ImageView imgViewGraph;
-
     ImageButton imageButtonStop;
     ImageButton imageButtonPlay;
     ImageButton imageButtonRecord;
-
     ActivityState activityState;
-
     Handler timerHandler = new Handler();
-
     JukeBox jukeBox;
-
     VolumeGraphComponent graphComponent;
-
     Runnable refreshTimer = new Runnable() {
         @Override
         public void run() {
@@ -52,16 +55,12 @@ public class MainActivity extends Activity implements OnClickListener {
         }
     };
 
-    // for permission to RECORD_AUDIO
-    private boolean permissionToRecordAccepted;
-    private String[] permissions = {Manifest.permission.RECORD_AUDIO};
-
 
     public MainActivity() {
         graphComponent = new VolumeGraphComponent(DIMENSIONS);
 
         jukeBox = new JukeBox();
-        jukeBox.setMediaPlaerStopListener(new MediaPlayerStopListener() {
+        jukeBox.setMediaPlayerStopListener(new MediaPlayerStopListener() {
             @Override
             public void onStopped() {
                 makeStop();
@@ -69,7 +68,6 @@ public class MainActivity extends Activity implements OnClickListener {
         });
 
         graphComponent.link(jukeBox);
-
     }
 
     private void startShowVolumeGraph() {
@@ -81,9 +79,25 @@ public class MainActivity extends Activity implements OnClickListener {
         timerHandler.removeCallbacks(refreshTimer);
     }
 
-    private void startRecording(String mFileName) {
-        jukeBox.startRecording(mFileName);
-        updateState(ActivityState.RECORDING);
+    /**
+     * Checks if the app has permission to write to device storage
+     * <p>
+     * If the app does not has permission then the user will be prompted to grant permissions
+     *
+     * @param activity
+     */
+    public static void verifyStoragePermissions(Activity activity) {
+        // Check if we have write permission
+        int permission = ActivityCompat.checkSelfPermission(activity, Manifest.permission.WRITE_EXTERNAL_STORAGE);
+
+        if (permission != PackageManager.PERMISSION_GRANTED) {
+            // We don't have permission so prompt the user
+            ActivityCompat.requestPermissions(
+                    activity,
+                    PERMISSIONS_STORAGE,
+                    REQUEST_EXTERNAL_STORAGE
+            );
+        }
     }
 
     private void stopRecording() {
@@ -101,16 +115,23 @@ public class MainActivity extends Activity implements OnClickListener {
         updateState(ActivityState.STOPPED);
     }
 
+    private void startRecording(String mFileName) {
+        verifyStoragePermissions(this);
+        jukeBox.startRecording(mFileName);
+        updateState(ActivityState.RECORDING);
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Log.d(TAG, "on create");
 
         setContentView(R.layout.activity_main);
-        ActivityCompat.requestPermissions(this, permissions, REQUEST_RECORD_AUDIO_PERMISSION);
 
-        // Record to the external cache directory for visibility
-        fileName = getExternalCacheDir().getAbsolutePath() + "/audiorecordtest.3gp";
+        ActivityCompat.requestPermissions(this, permissionsRECORD_AUDIO, REQUEST_RECORD_AUDIO_PERMISSION);
+
+        // Record to the external cache directory for !NO! visibility
+        recFileName = getExternalCacheDir().getAbsolutePath() + "/audiorecord.3gp";
 
         txtView1 = findViewById(R.id.textView);
 
@@ -195,7 +216,7 @@ public class MainActivity extends Activity implements OnClickListener {
             case R.id.imageButtonPlay:
                 Log.d(TAG, "play");
                 // начать воспроизведение последней записи.
-                startPlaying(fileName);
+                startPlaying(recFileName);
                 break;
 
             case R.id.imageButtonStop:
@@ -204,7 +225,7 @@ public class MainActivity extends Activity implements OnClickListener {
 
             case R.id.imageButtonRec:
                 Log.d(TAG, "record");
-                startRecording(fileName);
+                startRecording(recFileName);
                 startShowVolumeGraph();
                 break;
         }
