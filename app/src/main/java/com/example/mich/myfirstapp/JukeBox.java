@@ -3,19 +3,28 @@ package com.example.mich.myfirstapp;
 import android.media.MediaPlayer;
 import android.media.MediaRecorder;
 import android.util.Log;
+import com.example.mich.myfirstapp.VolumeGraphComponent.ValueReceiver;
 
 import java.io.IOException;
 
 public class JukeBox implements ValueReceiver {
     private static final String TAG = "JukeBox";
-    private static JukeBox instance;
+
     private MediaRecorder mediaRecorder;
     private MediaPlayer mediaPlayer;
-    private ShowStopper showStopper;
 
-    JukeBox(ShowStopper showStopper) {
-        this.showStopper = showStopper;
+    private MediaPlayerStopListener playerStopListener;
+
+    public void stopPlaying() {
+        if (mediaPlayer != null) {
+            mediaPlayer.stop();
+            releaseMediaDevices();
+            if (playerStopListener != null) {
+                playerStopListener.onStopped();
+            }
+        }
     }
+
 
     public void startRecording(String mFileName) {
         mediaRecorder = new MediaRecorder();
@@ -62,12 +71,8 @@ public class JukeBox implements ValueReceiver {
         }
     }
 
-    public void stopPlaying() {
-        if (mediaPlayer != null) {
-            mediaPlayer.stop();
-            releaseMediaDevices();
-            showStopper.makeStop();
-        }
+    public void setMediaPlaerStopListener(MediaPlayerStopListener listener) {
+        playerStopListener = listener;
     }
 
     public void releaseMediaDevices() {
@@ -86,5 +91,9 @@ public class JukeBox implements ValueReceiver {
     @Override
     public int getValue() {
         return mediaRecorder == null ? 0 : mediaRecorder.getMaxAmplitude();
+    }
+
+    public interface MediaPlayerStopListener {
+        void onStopped();
     }
 }

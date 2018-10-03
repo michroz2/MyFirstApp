@@ -17,6 +17,10 @@ public class VolumeGraphComponent extends Drawable {
     private int[] drawArray;
     private int maxValue = 1; // Это простой способ избежать деления на 0, поскольку это значение будет в знаменателе
     private int positionCounter;
+
+    public interface ValueReceiver {
+        int getValue();
+    }
     private ValueReceiver valueReceiver;
 
 

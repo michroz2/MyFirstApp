@@ -13,6 +13,7 @@ import android.view.View.OnClickListener;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import com.example.mich.myfirstapp.JukeBox.MediaPlayerStopListener;
 
 public class MainActivity extends Activity implements OnClickListener {
 
@@ -39,7 +40,6 @@ public class MainActivity extends Activity implements OnClickListener {
     Handler timerHandler = new Handler();
 
     JukeBox jukeBox;
-    MainactivityStopper mainactivityStopper;
 
     VolumeGraphComponent graphComponent;
 
@@ -59,8 +59,14 @@ public class MainActivity extends Activity implements OnClickListener {
 
     public MainActivity() {
         graphComponent = new VolumeGraphComponent(DIMENSIONS);
-        mainactivityStopper = new MainactivityStopper(this);
-        jukeBox = new JukeBox(mainactivityStopper);
+
+        jukeBox = new JukeBox();
+        jukeBox.setMediaPlaerStopListener(new MediaPlayerStopListener() {
+            @Override
+            public void onStopped() {
+                makeStop();
+            }
+        });
 
         graphComponent.link(jukeBox);
 
