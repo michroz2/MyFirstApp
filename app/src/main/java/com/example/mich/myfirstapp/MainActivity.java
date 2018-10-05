@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.annotation.RequiresApi;
@@ -18,6 +19,8 @@ import android.widget.TextView;
 
 import com.example.mich.myfirstapp.JukeBox.MediaPlayerStopListener;
 
+import static android.os.Environment.DIRECTORY_DOWNLOADS;
+
 @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
 public class MainActivity extends Activity implements OnClickListener {
 
@@ -26,17 +29,14 @@ public class MainActivity extends Activity implements OnClickListener {
     // for permission to RECORD_AUDIO
     private static final int REQUEST_RECORD_AUDIO_PERMISSION = 200;
     private static final int REQUEST_EXTERNAL_STORAGE = 1;
+    // for permissions to write a data file to external storage
+    private static final int DIMENSIONS = 30;
+    private static final int REFRESH_TIME = 500;
     private static String[] PERMISSIONS_STORAGE = {
             Manifest.permission.READ_EXTERNAL_STORAGE,
             Manifest.permission.WRITE_EXTERNAL_STORAGE
     };
     private static String recFileName;
-    private boolean permissionToRecordAccepted;
-
-    private static final int DIMENSIONS = 200;
-
-    private static final int REFRESH_TIME = 40;
-    private String[] permissionsRECORD_AUDIO = {Manifest.permission.RECORD_AUDIO};
     TextView txtView1;
     ImageView imgViewGraph;
     ImageButton imageButtonStop;
@@ -46,18 +46,27 @@ public class MainActivity extends Activity implements OnClickListener {
     Handler timerHandler = new Handler();
     JukeBox jukeBox;
     VolumeGraphComponent graphComponent;
+    VolumeTextComponent textComponent;
+
     Runnable refreshTimer = new Runnable() {
         @Override
         public void run() {
+/*
             imgViewGraph.invalidateDrawable(graphComponent);
             imgViewGraph.setImageDrawable(graphComponent);
+*/
+            imgViewGraph.invalidateDrawable(textComponent);
+            imgViewGraph.setImageDrawable(textComponent);
             timerHandler.postDelayed(this, REFRESH_TIME);
         }
     };
+    private String[] permissionsRECORD_AUDIO = {Manifest.permission.RECORD_AUDIO};
+    private boolean permissionToRecordAccepted;
 
 
     public MainActivity() {
         graphComponent = new VolumeGraphComponent(DIMENSIONS);
+        textComponent = new VolumeTextComponent();
 
         jukeBox = new JukeBox();
         jukeBox.setMediaPlayerStopListener(new MediaPlayerStopListener() {
@@ -67,16 +76,8 @@ public class MainActivity extends Activity implements OnClickListener {
             }
         });
 
-        graphComponent.link(jukeBox);
-    }
-
-    private void startShowVolumeGraph() {
-        // Запустить "таймер" для периодлического взятия значений громкости
-        timerHandler.postDelayed(refreshTimer, 0);
-    }
-
-    private void stopShowVolumeGraph() {
-        timerHandler.removeCallbacks(refreshTimer);
+//        graphComponent.link(jukeBox);
+        textComponent.link(jukeBox);
     }
 
     /**
@@ -84,7 +85,7 @@ public class MainActivity extends Activity implements OnClickListener {
      * <p>
      * If the app does not has permission then the user will be prompted to grant permissions
      *
-     * @param activity
+     * @param activity = this.
      */
     public static void verifyStoragePermissions(Activity activity) {
         // Check if we have write permission
@@ -98,6 +99,15 @@ public class MainActivity extends Activity implements OnClickListener {
                     REQUEST_EXTERNAL_STORAGE
             );
         }
+    }
+
+    private void startShowVolumeGraph() {
+        // Запустить "таймер" для периодлического взятия значений громкости
+        timerHandler.postDelayed(refreshTimer, 0);
+    }
+
+    private void stopShowVolumeGraph() {
+        timerHandler.removeCallbacks(refreshTimer);
     }
 
     private void stopRecording() {
@@ -129,14 +139,14 @@ public class MainActivity extends Activity implements OnClickListener {
         setContentView(R.layout.activity_main);
 
         ActivityCompat.requestPermissions(this, permissionsRECORD_AUDIO, REQUEST_RECORD_AUDIO_PERMISSION);
+        // По каким-то причинам запросить также сразу пермиссии на запись во внешний сторидж не получается: прога вылетает
 
-        // Record to the external cache directory for !NO! visibility
-        recFileName = getExternalCacheDir().getAbsolutePath() + "/audiorecord.3gp";
+        // Record to the external directory for visibility
+        recFileName = Environment.getExternalStoragePublicDirectory(DIRECTORY_DOWNLOADS).getAbsolutePath() + "/audiorecord.3gp";
 
         txtView1 = findViewById(R.id.textView);
 
         imgViewGraph = findViewById(R.id.imageView);
-
 
         imageButtonStop = findViewById(R.id.imageButtonStop);
         imageButtonStop.setOnClickListener(this);

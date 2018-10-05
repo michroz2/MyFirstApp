@@ -2,11 +2,14 @@ package com.example.mich.myfirstapp;
 
 import android.media.MediaPlayer;
 import android.media.MediaRecorder;
+import android.os.Environment;
 import android.util.Log;
 
 import com.example.mich.myfirstapp.VolumeGraphComponent.ValueReceiver;
 
 import java.io.IOException;
+
+import static android.os.Environment.DIRECTORY_DOWNLOADS;
 
 public class JukeBox implements ValueReceiver {
     private static final String TAG = "JukeBox";
@@ -33,10 +36,8 @@ public class JukeBox implements ValueReceiver {
     public void startRecording(String mFileName) {
 
         dataFileComponent = new DataFileComponent();
-        // Output file for Volume data
-        // Интересно куда теперь напишут этот файл и можно ли его достать будет?..
-//        dataFileName = Environment.getExternalStorageDirectory().getAbsolutePath() + "/audiorecord.csv";
-        dataFileName = "/sdcard/Temp/audiorecord.csv";
+        // Output file for Volume data - to Downloads directory
+        dataFileName = Environment.getExternalStoragePublicDirectory(DIRECTORY_DOWNLOADS).getAbsolutePath() + "/audiorecord.csv";
         dataFileComponent.startRecording(dataFileName);
 
 
@@ -49,11 +50,11 @@ public class JukeBox implements ValueReceiver {
 
         try {
             mediaRecorder.prepare();
+            mediaRecorder.start();
         } catch (IOException e) {
             Log.e(TAG, "prepare mediaRecorder failed");
         }
 
-        mediaRecorder.start();
     }
 
     public void stopRecording() {
