@@ -4,6 +4,7 @@ import android.graphics.Canvas;
 import android.graphics.ColorFilter;
 import android.graphics.Paint;
 import android.graphics.PixelFormat;
+import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -14,15 +15,23 @@ public class VolumeTextComponent extends Drawable {
     private final Paint mPaint;
     private final Paint mBackgroundPaint;
     private final Paint mRedPaint;
+    private Typeface typeface;
     private VolumeGraphComponent.ValueReceiver valueReceiver;
 
     VolumeTextComponent() {
         mPaint = new Paint();
-        mPaint.setARGB(255, 0, 0, 255);
+        mPaint.setARGB(255, 255, 128, 0);
+
         mBackgroundPaint = new Paint();
-        mBackgroundPaint.setARGB(255, 255, 255, 255);
+        mBackgroundPaint.setARGB(255, 160, 160, 160);
+
         mRedPaint = new Paint();
         mRedPaint.setARGB(255, 255, 0, 0);
+
+        // Готовим формат текста
+        mPaint.setTextAlign(Paint.Align.RIGHT);
+        mPaint.setAntiAlias(true);
+
     }
 
     /**
@@ -43,18 +52,21 @@ public class VolumeTextComponent extends Drawable {
         // Затираем предыдущую картинку
         canvas.drawRect(0, 0, width, height, mBackgroundPaint);
 
+        // Подстраиваем параметры текста:
+//TODO - Спросить Андрея почему не олучается использовать дробные числа здесь?
+        mPaint.setTextSize(height / 3 * 2);
+//        mPaint.getTextBounds("88888",...) - лень заморачиваться для этой тестовой программы
+
+        Paint mGrayPaint = new Paint(mPaint);
+        mGrayPaint.setARGB(255, 150, 150, 150);
+
+
         // Получаем новое значение громкости:
         int newValue = valueReceiver.getValue();
 
-        // Готовим формат текста
-        mPaint.setTextAlign(Paint.Align.RIGHT);
-        mPaint.setTextSize(height / 4 * 3);
-        mPaint.setAntiAlias(true);
-        //       mPaint.setTypeface(Typeface.createFromAsset(R.font.ssegbi));
-
-
-        // выводим значение:
-        canvas.drawText(String.valueOf(newValue), (width / 10 * 9), (height / 4 * 3), mPaint);
+        // выводим новое значение:
+        canvas.drawText("88888", (width), (height / 6 * 5), mGrayPaint);
+        canvas.drawText(String.valueOf(newValue), (width), (height / 6 * 5), mPaint);
 
     }
 
@@ -94,5 +106,12 @@ public class VolumeTextComponent extends Drawable {
     public int getOpacity() {
         // Must be PixelFormat.UNKNOWN, TRANSLUCENT, TRANSPARENT, or OPAQUE
         return PixelFormat.OPAQUE;
+    }
+
+    public void setTypeface(Typeface typeface) {
+        this.typeface = typeface;
+        mPaint.setTypeface(typeface);
+        mBackgroundPaint.setTypeface(typeface);
+        mRedPaint.setTypeface(typeface);
     }
 }

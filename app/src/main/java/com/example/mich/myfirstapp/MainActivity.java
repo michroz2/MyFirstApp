@@ -3,6 +3,7 @@ package com.example.mich.myfirstapp;
 import android.Manifest;
 import android.app.Activity;
 import android.content.pm.PackageManager;
+import android.graphics.Typeface;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
@@ -55,8 +56,12 @@ public class MainActivity extends Activity implements OnClickListener {
             imgViewGraph.invalidateDrawable(graphComponent);
             imgViewGraph.setImageDrawable(graphComponent);
 */
+
+//TODO: Блин - очень нехорошее место для установки фонта, но в конструкторе и onCreate ругается - типа ещё нет инстанса AssetsManager...
+            textComponent.setTypeface(Typeface.createFromAsset(getAssets(), "ssegbi.ttf"));
             imgViewGraph.invalidateDrawable(textComponent);
             imgViewGraph.setImageDrawable(textComponent);
+
             timerHandler.postDelayed(this, REFRESH_TIME);
         }
     };
