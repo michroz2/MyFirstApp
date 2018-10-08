@@ -32,7 +32,7 @@ public class MainActivity extends Activity implements OnClickListener {
     private static final int REQUEST_EXTERNAL_STORAGE = 1;
     // for permissions to write a data file to external storage
     private static final int DIMENSIONS = 30;
-    private static final int REFRESH_TIME = 500;
+    private static final int REFRESH_TIME = 33;
     private static String[] PERMISSIONS_STORAGE = {
             Manifest.permission.READ_EXTERNAL_STORAGE,
             Manifest.permission.WRITE_EXTERNAL_STORAGE

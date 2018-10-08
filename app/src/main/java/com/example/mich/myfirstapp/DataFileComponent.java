@@ -11,7 +11,6 @@ import java.io.IOException;
 public class DataFileComponent {
 
     private static final String TAG = "DataFileComponent";
-    //    private FileWriter dataFile;
     private String fileName;
 
     /**

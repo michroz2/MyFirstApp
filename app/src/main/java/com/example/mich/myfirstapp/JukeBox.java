@@ -20,6 +20,8 @@ public class JukeBox implements ValueReceiver {
     private DataFileComponent dataFileComponent;
     private String dataFileName;
 
+    private ScreamCommandComponent screamCommandComponent;
+
     private MediaPlayerStopListener playerStopListener;
 
     public void stopPlaying() {
@@ -40,6 +42,7 @@ public class JukeBox implements ValueReceiver {
         dataFileName = Environment.getExternalStoragePublicDirectory(DIRECTORY_DOWNLOADS).getAbsolutePath() + "/audiorecord.csv";
         dataFileComponent.startRecording(dataFileName);
 
+        screamCommandComponent = new ScreamCommandComponent();
 
         mediaRecorder = new MediaRecorder();
 
@@ -105,7 +108,8 @@ public class JukeBox implements ValueReceiver {
     @Override
     public int getValue() {
         int result = (mediaRecorder == null) ? 0 : mediaRecorder.getMaxAmplitude();
-        dataFileComponent.write(result);
+        dataFileComponent.write(result); // This is for Excel analyses only. should be removed afterwards.
+        screamCommandComponent.nextValue(result);
         return result;
     }
 

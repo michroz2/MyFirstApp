@@ -55,7 +55,9 @@ public class VolumeTextComponent extends Drawable {
         // Подстраиваем параметры текста:
 //TODO - Спросить Андрея почему не олучается использовать дробные числа здесь?
         mPaint.setTextSize(height / 3 * 2);
-//        mPaint.getTextBounds("88888",...) - лень заморачиваться для этой тестовой программы
+
+        //        mPaint.getTextBounds("88888",...) -
+// лень заморачиваться подстройкой размера текста, главное что: "Ну, немецкий я знаю..."
 
         Paint mGrayPaint = new Paint(mPaint);
         mGrayPaint.setARGB(255, 150, 150, 150);
