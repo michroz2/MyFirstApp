@@ -31,7 +31,7 @@ public class ScreamCommandComponent {
         postfix = 10; // мин допустимое время отсутствия сигнала после конца последовательности
         signalState = 0;
         signalStateCounter = 0;
-        signalThreshold = 4;
+        signalThreshold = 4; // используется после сигнала для детектирования того, что больше сигналов нет.
         startCountdown = 30; // 30 cycles pause before start recognizing commands.
         streak = 0;
     }
@@ -52,19 +52,22 @@ public class ScreamCommandComponent {
      */
     public void nextValue(int value) {
 
-        if (commandDetected) { // no action needed - clear the command first: setCommandDetected(false)
+        if (commandDetected) { // no action needed - it requires to clear the command first, i.e. call: setCommandDetected(false)
             return;
         }
 
+        // store last 6 values (~200 ms) for smoothing the output with "running average" (RA) of 6 last values
         last6[last6Pos] = value;
         last6Pos = (last6Pos + 1) % 6;
         prevRA = curRA;
         curRA = last6Average();
+        // calculate the difference between RA-s (i.e. 'differentiate' the values )
         prevDiff = curDiff;
         curDiff = curRA - prevRA;
 
+        // Calculate the 'streak' length of diff values of similar sign.
         if (prevDiff > 0) {
-            if (curDiff > 0) {
+            if (curDiff > 0) { // positive values' streak grows
                 streak++;
             } else {
                 streak = -1;
@@ -72,16 +75,19 @@ public class ScreamCommandComponent {
         } else {
             if (curDiff > 0) {
                 streak = 1;
-            } else {
+            } else {   // negative values streak grows
                 streak--;
             }
         }
 
-
+// this is to eliminate the beginning set of values worth of 1 sec
         if (startCountdown > 0) {  //starting sequence 1 sec not finished - return
             startCountdown--;
             return;
         }
+
+        // Далее пока довольно неуклюже детектируется сигнал путём прохождения бегущих данных через заранее ожидаемые состояния
+        // TODO: попытаться заменить обобщённым методом, зависящим только от данных (от паттерна команды)
 
         switch (signalState) {
             case 0:  // pre-sequence state
@@ -89,17 +95,17 @@ public class ScreamCommandComponent {
                     signalState = 1;
                 }
                 break;
-            case 1:  // 1st up: there must be not less than qqPattern positive signals
+            case 1:  // 1st positive streak: there must be not less than qqPattern consecutive positive values
                 if (streak < 0) { // too early, not qualified for signal
                     signalState = 0;
                     return;
                 }
-                if (streak == qqPattern[0][0]) { // signal is long enough - go to the next state
+                if (streak == qqPattern[0][0]) { // streak is long enough - go to the next state
                     signalState = 2;
                 }
                 break;
-            case 2:  // still 1st positive: there must be not more than qqPattern 1,2 positive signals
-                if (streak < 0) { // good! promoted for 1st down signal
+            case 2:  // still 1st positive: there must be not more than qqPattern max positive signals
+                if (streak < 0) { // good! promoted for 1st negative sequence
                     signalState = 3;
                     return;
                 }
@@ -108,24 +114,24 @@ public class ScreamCommandComponent {
                 }
                 break;
             case 3:  // 1st negative after correct 1st positive detected
-                if (streak > 0) { // too early, not qualified for signal
+                if (streak > 0) { // ended too early, not qualified for signal
                     signalState = 0;
                     return;
                 }
-                if (streak == qqPattern[0][1]) { // promoted for possible 2-nd positive signal
+                if (streak == qqPattern[0][1]) { // promoted for possible 2-nd positive streak
                     signalState = 4;
                 }
                 break;
-            case 4:  // still 1st negative: there must be not more than qqPattern 2,2 signals
+            case 4:  // still 1st negative: there must be not more than qqPattern 1,1 values
                 if (streak > 0) { // promoted for 2nd up signal
                     signalState = 5;
                     return;
                 }
-                if (streak < qqPattern[1][1]) { // not qualified for signal - too long
+                if (streak < qqPattern[1][1]) { // not qualified for command - too long
                     signalState = 0;
                 }
                 break;
-            case 5:  // 2nd positive signal after correct 1-st + and - detected
+            case 5:  // 2nd positive streak after correct 1-st + and - detected
                 if (streak < 0) { // too early, not qualified
                     signalState = 0;
                     return;
@@ -134,26 +140,26 @@ public class ScreamCommandComponent {
                     signalState = 6;
                 }
                 break;
-            case 6:  // 2-nd positive must be not more than qqPattern 3,2
-                if (streak < 0) { // good! promoted for 2nd down signal
+            case 6:  // 2-nd positive must be not longer than qqPattern 1,2
+                if (streak < 0) { // good! promoted for 2nd negative streak
                     signalState = 7;
                     return;
                 }
-                if (streak > qqPattern[1][2]) { // not qualified for signal - too long
+                if (streak > qqPattern[1][2]) { // not qualified for command - too long
                     signalState = 0;
                 }
                 break;
             case 7:  // 2nd negative after correct 2nd positive detected
-                if (streak > 0) { // too early, not qualified for signal
+                if (streak > 0) { // too early, not qualified for command
                     signalState = 0;
                     return;
                 }
-                if (streak == qqPattern[0][3]) { // possibly 2-nd negative signal detected
+                if (streak == qqPattern[0][3]) { // possibly 2-nd negative streak detected
                     signalState = 8;
                 }
                 break;
-            case 8:  // still 2nd down: there must be not more than qqPattern max signals
-                if (streak > 0) { // promoted for the final - postsignal state
+            case 8:  // still 2nd down: there must be not more than qqPattern max values
+                if (streak > 0) { // promoted for the final - post-signal state
                     signalState = 9;
                     return;
                 }
@@ -161,12 +167,12 @@ public class ScreamCommandComponent {
                     signalState = 0;
                 }
                 break;
-            case 9:  // signal sequence was ok - just wait for NO MORE other signals next few cycles
-                if (streak > signalThreshold) { // not good  -  something else detected. Signal does not qualify for command
+            case 9:  // command sequence was ok - just wait for NO MORE other signals during the next few cycles
+                if (streak > signalThreshold) { // not good  -  something else was detected. Signal does not qualify for command
                     signalState = 0;
                     return;
                 }
-                if (signalStateCounter++ > postfix) { // Hurraaaay! long enough no activity detected after the valid signals sequence, flag the command detected!
+                if (signalStateCounter++ > postfix) { // Hurraaaay! long enough "tail" of no signal was detected after the valid command sequence, flag the command detected!
                     signalState = 0;
                     signalStateCounter = 0;
                     commandDetected = true;
@@ -182,8 +188,8 @@ public class ScreamCommandComponent {
 
     private int last6Average() {
         int result = 0;
-        for (int i = 0; i < last6.length; i++) {
-            result += last6[i];
+        for (int aLast6 : last6) {
+            result += aLast6;
         }
         return result / last6.length;
     }
