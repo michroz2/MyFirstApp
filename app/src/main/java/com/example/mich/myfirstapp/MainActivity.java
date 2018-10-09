@@ -49,6 +49,8 @@ public class MainActivity extends Activity implements OnClickListener {
     VolumeGraphComponent graphComponent;
     VolumeTextComponent textComponent;
 
+    private static final int showTextCounterMax = 10;
+    private int showTextCounter;
     Runnable refreshTimer = new Runnable() {
         @Override
         public void run() {
@@ -59,8 +61,13 @@ public class MainActivity extends Activity implements OnClickListener {
 
 //TODO: Блин - очень нехорошее место для установки фонта, но в конструкторе и onCreate ругается - типа ещё нет инстанса AssetsManager...
             textComponent.setTypeface(Typeface.createFromAsset(getAssets(), "ssegbi.ttf"));
-            imgViewGraph.invalidateDrawable(textComponent);
-            imgViewGraph.setImageDrawable(textComponent);
+
+            showTextCounter++;
+            if ((showTextCounter % showTextCounterMax) == 0) { // Это должно в 10 раз уменьшить частоту обновления текста.
+                imgViewGraph.invalidateDrawable(textComponent);
+                imgViewGraph.setImageDrawable(textComponent);
+            }
+
 
             timerHandler.postDelayed(this, REFRESH_TIME);
         }
@@ -77,6 +84,13 @@ public class MainActivity extends Activity implements OnClickListener {
         jukeBox.setMediaPlayerStopListener(new MediaPlayerStopListener() {
             @Override
             public void onStopped() {
+                makeStop();
+            }
+        });
+
+        jukeBox.setScreamCommandHandler(new JukeBox.ScreamCommandHandler() {
+            @Override
+            public void onScreamCommand() {
                 makeStop();
             }
         });
@@ -106,12 +120,12 @@ public class MainActivity extends Activity implements OnClickListener {
         }
     }
 
-    private void startShowVolumeGraph() {
+    private void startShowVolume() {
         // Запустить "таймер" для периодлического взятия значений громкости
         timerHandler.postDelayed(refreshTimer, 0);
     }
 
-    private void stopShowVolumeGraph() {
+    private void stopShowVolume() {
         timerHandler.removeCallbacks(refreshTimer);
     }
 
@@ -241,7 +255,7 @@ public class MainActivity extends Activity implements OnClickListener {
             case R.id.imageButtonRec:
                 Log.d(TAG, "record");
                 startRecording(recFileName);
-                startShowVolumeGraph();
+                startShowVolume();
                 break;
         }
     }
@@ -252,7 +266,7 @@ public class MainActivity extends Activity implements OnClickListener {
         //остановить либо запись либо воспроизведение - смотря что там сейчас идёт
         switch (activityState) {
             case RECORDING:
-                stopShowVolumeGraph();
+                stopShowVolume();
                 stopRecording();
                 break;
             case PLAYING:

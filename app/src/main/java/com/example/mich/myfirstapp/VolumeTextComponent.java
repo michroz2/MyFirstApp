@@ -10,6 +10,9 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.util.Log;
 
+/**
+ * Рисует громкость текстом вместо VolumeGraphComponent
+ */
 public class VolumeTextComponent extends Drawable {
     private static final String TAG = "VolumeTextComponent";
     private final Paint mPaint;
@@ -57,7 +60,7 @@ public class VolumeTextComponent extends Drawable {
         mPaint.setTextSize(height / 3 * 2);
 
         //        mPaint.getTextBounds("88888",...) -
-// лень заморачиваться подстройкой размера текста, главное что: "Ну, немецкий я знаю..."
+// лень заморачиваться автоматической подстройкой размера текста, главное что: "Ну, немецкий я знаю..."
 
         Paint mGrayPaint = new Paint(mPaint);
         mGrayPaint.setARGB(255, 150, 150, 150);

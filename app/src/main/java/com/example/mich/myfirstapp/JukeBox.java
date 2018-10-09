@@ -23,9 +23,15 @@ public class JukeBox implements ValueReceiver {
     private ScreamCommandComponent screamCommandComponent;
 
     private MediaPlayerStopListener playerStopListener;
+    private ScreamCommandHandler screamCommandHandler;
+
+    public void setScreamCommandHandler(ScreamCommandHandler screamCommandHandler) {
+        this.screamCommandHandler = screamCommandHandler;
+    }
 
     public void stopPlaying() {
         if (mediaPlayer != null) {
+
             mediaPlayer.stop();
             releaseMediaDevices();
             if (playerStopListener != null) {
@@ -110,8 +116,16 @@ public class JukeBox implements ValueReceiver {
         int result = (mediaRecorder == null) ? 0 : mediaRecorder.getMaxAmplitude();
         dataFileComponent.write(result); // This is for Excel analyses only. should be removed afterwards.
         screamCommandComponent.nextValue(result);
+        if (screamCommandComponent.isCommandDetected()) {
+            screamCommandHandler.onScreamCommand();
+        }
         return result;
     }
+
+    public interface ScreamCommandHandler {
+        void onScreamCommand();
+    }
+
 
     public interface MediaPlayerStopListener {
         void onStopped();
