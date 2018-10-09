@@ -1,14 +1,17 @@
 package com.example.mich.myfirstapp;
 
+import android.util.Log;
+
 /**
  * Этот компонент определяет наличие "голосовой команды" ("Ку-ку!", "Хо-хо!" или "Э-гей!") в потоке значений громкости записываемого звука.
  * Он обрабатывает значения грмкости и сравнивает результат с требуемыми значениями.
  * Для простоты считается, что значения идут с частотой 1/33мс (~30 Гц) - не менять REFRESH_TIME = 33 в MainActivity!
  */
 public class ScreamCommandComponent {
-    private static int[][] qqPattern = {{4, -4, 4, -4}, {8, -8, 10, -10}}; // последовательность мин и мах подходящих длин участков значений общего знака +/-/+/-
+    private static int[][] qqPattern = {{4, -3, 4, -3}, {100, -100, 100, -100}}; // последовательность мин и мах подходящих длин участков значений общего знака +/-/+/-
+    int maxSequenceAchieved = 0;
     private int prefix = 10; // мин допустимое время отсутствия сигнала до начала последовательности (не использ.)
-    private int postfix = 10; // мин допустимое время отсутствия сигнала после конца последовательности
+    private int postfix = 5; // мин допустимое время отсутствия сигнала после конца последовательности
     private int signalState = 0;
     private int signalStateCounter = 0;
     private int signalThreshold = 4;
@@ -89,6 +92,13 @@ public class ScreamCommandComponent {
         // Далее пока довольно неуклюже детектируется сигнал путём прохождения бегущих данных через заранее ожидаемые состояния
         // TODO: попытаться заменить обобщённым методом, зависящим только от данных (от паттерна команды)
 
+// debugging
+        if (signalState != maxSequenceAchieved) {
+            maxSequenceAchieved = signalState;
+            Log.e("MaxSignal ", String.valueOf(signalState) + " Streak: " + String.valueOf(streak));
+        }
+
+
         switch (signalState) {
             case 0:  // pre-sequence state
                 if (streak == 1) { //possible start of command detected
@@ -168,15 +178,17 @@ public class ScreamCommandComponent {
                 }
                 break;
             case 9:  // command sequence was ok - just wait for NO MORE other signals during the next few cycles
+/*
                 if (streak > signalThreshold) { // not good  -  something else was detected. Signal does not qualify for command
                     signalState = 0;
                     return;
                 }
                 if (signalStateCounter++ > postfix) { // Hurraaaay! long enough "tail" of no signal was detected after the valid command sequence, flag the command detected!
-                    signalState = 0;
+*/
+                signalState = 10;
                     signalStateCounter = 0;
                     commandDetected = true;
-                }
+//                }
                 break;
         }
 

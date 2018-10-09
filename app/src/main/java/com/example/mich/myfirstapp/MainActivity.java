@@ -62,11 +62,11 @@ public class MainActivity extends Activity implements OnClickListener {
 //TODO: Блин - очень нехорошее место для установки фонта, но в конструкторе и onCreate ругается - типа ещё нет инстанса AssetsManager...
             textComponent.setTypeface(Typeface.createFromAsset(getAssets(), "ssegbi.ttf"));
 
-            showTextCounter++;
-            if ((showTextCounter % showTextCounterMax) == 0) { // Это должно в 10 раз уменьшить частоту обновления текста.
+//            showTextCounter++;
+//            if ((showTextCounter % showTextCounterMax) == 0) { // Это должно в 10 раз уменьшить частоту обновления текста.
                 imgViewGraph.invalidateDrawable(textComponent);
                 imgViewGraph.setImageDrawable(textComponent);
-            }
+//            }
 
 
             timerHandler.postDelayed(this, REFRESH_TIME);
